@@ -42,16 +42,13 @@ class RCalendarWidget extends StatefulWidget {
 
 class _RCalendarWidgetState extends State<RCalendarWidget> {
   DateTime _toDayDate;
-  DateTime _previousMonthDate;
-  DateTime _currentDisplayedMonthDate;
-  DateTime _nextMonthDate;
 
   Timer _timer;
 
   ///选中日期更改
   void _handleDayChanged(DateTime value) {
     setState(() {
-      widget.controller.selectedDate = value;
+      widget.controller.updateSelected(value);
     });
   }
 
@@ -80,11 +77,12 @@ class _RCalendarWidgetState extends State<RCalendarWidget> {
   ///处理月份页改变
   void _handleMonthPageChanged(int monthPage) {
     setState(() {
-      _previousMonthDate =
-          _addMonthsToMonthDate(widget.firstDate, monthPage - 1);
-      _currentDisplayedMonthDate =
-          _addMonthsToMonthDate(widget.firstDate, monthPage);
-      _nextMonthDate = _addMonthsToMonthDate(widget.firstDate, monthPage + 1);
+      widget.controller.updateDisplayedDate(monthPage);
+//      _previousMonthDate =
+//          _addMonthsToMonthDate(widget.firstDate, monthPage - 1);
+//      _currentDisplayedMonthDate =
+//          _addMonthsToMonthDate(widget.firstDate, monthPage);
+//      _nextMonthDate = _addMonthsToMonthDate(widget.firstDate, monthPage + 1);
     });
   }
 
@@ -101,9 +99,9 @@ class _RCalendarWidgetState extends State<RCalendarWidget> {
   @override
   void didUpdateWidget(RCalendarWidget oldWidget) {
     if (widget.controller.selectedDate.month !=
-        _currentDisplayedMonthDate.month ||
+        widget.controller.displayedMonthDate.month ||
         widget.controller.selectedDate.year !=
-            _currentDisplayedMonthDate.year) {
+            widget.controller.displayedMonthDate.year) {
       widget.controller.controller.jumpToPage(widget.controller.selectedPage);
     }
     super.didUpdateWidget(oldWidget);
@@ -112,12 +110,12 @@ class _RCalendarWidgetState extends State<RCalendarWidget> {
   int _getSelectRowCount() {
     int rowCount = 4;
     int maxDay = RCalendarUtils.getDaysInMonth(
-        _currentDisplayedMonthDate.year,
-        _currentDisplayedMonthDate.month);
+        widget.controller.displayedMonthDate.year,
+        widget.controller.displayedMonthDate.month);
     int labelCount = maxDay +
         RCalendarUtils.computeFirstDayOffset(
-            _currentDisplayedMonthDate.year,
-            _currentDisplayedMonthDate.month,
+            widget.controller.displayedMonthDate.year,
+            widget.controller.displayedMonthDate.month,
             MaterialLocalizations.of(context));
     if (labelCount <= 7 * 4) {
       rowCount = 4;
@@ -152,7 +150,7 @@ class _RCalendarWidgetState extends State<RCalendarWidget> {
             SizedBox(
               width: 16,
             ),
-            widget.customWidget.buildMonthYear(_currentDisplayedMonthDate),
+            widget.customWidget.buildMonthYear(widget.controller.displayedMonthDate),
             SizedBox(
               width: 16,
             ),

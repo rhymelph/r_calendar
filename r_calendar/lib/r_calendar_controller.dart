@@ -8,7 +8,26 @@ class RCalendarController extends ChangeNotifier {
 
   DateTime selectedDate;
 
+  DateTime displayedMonthDate;
+
   PageController controller;
+
+  DateTime firstDate;
+
+  DateTime lastDate;
+
+  void initial(DateTime firstDate, DateTime endDate) {
+    this.firstDate = firstDate;
+    this.lastDate = endDate;
+    displayedMonthDate = selectedDate;
+    final int monthPage =
+        _monthDelta(firstDate, selectedDate ?? DateTime.now());
+    controller = PageController(initialPage: monthPage);
+//    controller.addListener(() {
+//      displayMonth = _addMonthsToMonthDate(firstDate, controller.page ~/ 1);
+//      notifyListeners();
+//    });
+  }
 
   //下一页
   void nextPage({Duration duration, Curve curve}) {
@@ -38,23 +57,19 @@ class RCalendarController extends ChangeNotifier {
         startDate.month;
   }
 
-  DateTime firstDate;
-  DateTime lastDate;
-
-  void initial(DateTime firstDate, DateTime endDate) {
-    this.firstDate = firstDate;
-    this.lastDate = endDate;
-
-    final int monthPage =
-        _monthDelta(firstDate, selectedDate ?? DateTime.now());
-    controller = PageController(initialPage: monthPage);
-    controller.addListener(() {
-      notifyListeners();
-    });
+  /// 月份添加和减少
+  DateTime _addMonthsToMonthDate(DateTime monthDate, int monthsToAdd) {
+    return DateTime(
+        monthDate.year + monthsToAdd ~/ 12, monthDate.month + monthsToAdd % 12);
   }
 
   void updateSelected(DateTime selectedDate) {
     this.selectedDate = selectedDate;
+    notifyListeners();
+  }
+
+  void updateDisplayedDate(int monthPage) {
+    displayedMonthDate = _addMonthsToMonthDate(firstDate, monthPage);
     notifyListeners();
   }
 
@@ -63,4 +78,6 @@ class RCalendarController extends ChangeNotifier {
 
   //选中的页数
   int get selectedPage => _monthDelta(firstDate, selectedDate);
+
+  int get displayedPage => _monthDelta(firstDate, displayedMonthDate);
 }
