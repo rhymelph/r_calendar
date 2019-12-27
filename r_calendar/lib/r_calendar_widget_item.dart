@@ -9,7 +9,7 @@ import 'r_calendar_custom_widget.dart';
 
 class RCalendarWidgetItem extends StatelessWidget {
   //选中的日期
-  final DateTime selectedDate;
+  final List<DateTime> selectedDates;
 
   final DateTime currentDate;
 
@@ -33,7 +33,7 @@ class RCalendarWidgetItem extends StatelessWidget {
 
   const RCalendarWidgetItem(
       {Key key,
-      this.selectedDate,
+      this.selectedDates,
       this.currentDate,
       this.firstDate,
       this.lastDate,
@@ -124,9 +124,16 @@ class RCalendarWidgetItem extends StatelessWidget {
         if (disabled) {
           types.add(RCalendarType.disable);
         }
-        final bool isSelectedDay = selectedDate.year == year &&
-            selectedDate.month == month &&
-            selectedDate.day == day;
+        bool isSelectedDay = false;
+        try {
+          isSelectedDay = selectedDates
+                  .where((selectedDate) =>
+                      selectedDate.year == year &&
+                      selectedDate.month == month &&
+                      selectedDate.day == day)
+                  .length !=
+              0;
+        } catch (_) {}
         if (isSelectedDay) {
           types.add(RCalendarType.selected);
         }

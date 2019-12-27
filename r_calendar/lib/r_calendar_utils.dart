@@ -785,7 +785,7 @@ class RCalendarUtils {
   static void setupLunarCalendar(DateTime dateTime) {
 //    int year = dateTime.year;
 //    int month = dateTime.month;
-    int day = dateTime.day;
+//    int day = dateTime.day;
 
 //    dateModel.isWeekend = DateUtil.isWeekend(new DateTime(year, month, day));
 //    dateModel.isLeapYear = DateUtil.isLeapYear(year);

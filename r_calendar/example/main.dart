@@ -35,20 +35,9 @@ class _MyHomePageState extends State<MyHomePage> {
       DateTime(2019, 12, 1),
       DateTime(2019, 12, 2),
       DateTime(2019, 12, 3),
-    ],isDispersion: false)
-    ..addListener((){
-      // controller.isMultiple
+    ]);
 
-      // single selected
-      // controller.isAutoSelect
-      // controller.selectedDate;
-
-      // multiple selected
-      // controller.selectedDates;
-      // controller.isDispersion;
-
-    });
-
+//    controller = RCalendarController.single(selectedDate: DateTime.now(),isAutoSelect: true);
   }
 
   @override
@@ -77,14 +66,6 @@ class _MyHomePageState extends State<MyHomePage> {
           firstDate: DateTime(1970, 1, 1),
           lastDate: DateTime(2055, 12, 31),
         ),
-//        child: RecordDatePicker(
-//          selectedDate: DateTime.now(),
-//          firstDate: DateTime(1970, 1, 1),
-//          lastDate: DateTime(2055, 12, 31),
-//          children: List.generate(20, (index)=>ListTile(
-//            title: Text('data $index'),
-//          )),
-//        ),
       ),
       floatingActionButton: Row(
         mainAxisSize: MainAxisSize.min,

@@ -1,21 +1,4 @@
-# r_calendar
-A new Flutter package about calendar,you can use this design the calendar and support single or multiple selected.
-
-## How to use.
-
-1.add dependencies to your `pubspec.yaml`
-
-```yaml
-
-dependencies:
-    r_calendar: last version
-```
-2.add the packages to your file.
-
-```dart
-import 'package:r_calendar/r_calendar.dart';
-
-```
+# r_calendar_example
 
 ## English Language
 

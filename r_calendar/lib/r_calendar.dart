@@ -29,11 +29,12 @@ class RCalendarWidget extends StatefulWidget {
   //自定义部件
   final RCalendarCustomWidget customWidget;
 
-  const RCalendarWidget({Key key,
-    this.firstDate,
-    this.lastDate,
-    this.controller,
-    this.customWidget})
+  const RCalendarWidget(
+      {Key key,
+      this.firstDate,
+      this.lastDate,
+      this.controller,
+      this.customWidget})
       : super(key: key);
 
   @override
@@ -62,10 +63,10 @@ class _RCalendarWidgetState extends State<RCalendarWidget> {
   void _updateCurrentDate() {
     _toDayDate = DateTime.now();
     final DateTime tomorrow =
-    DateTime(_toDayDate.year, _toDayDate.month, _toDayDate.day + 1);
+        DateTime(_toDayDate.year, _toDayDate.month, _toDayDate.day + 1);
     Duration timeUntilTomorrow = tomorrow.difference(_toDayDate);
     timeUntilTomorrow +=
-    const Duration(seconds: 1); // so we don't miss it by rounding
+        const Duration(seconds: 1); // so we don't miss it by rounding
     _timer?.cancel();
     _timer = Timer(timeUntilTomorrow, () {
       setState(() {
@@ -90,20 +91,22 @@ class _RCalendarWidgetState extends State<RCalendarWidget> {
   void initState() {
     super.initState();
     widget.controller.initial(widget.firstDate, widget.lastDate);
-
-    final int monthPage = widget.controller.selectedPage;
-    _handleMonthPageChanged(monthPage);
     _updateCurrentDate();
   }
 
   @override
   void didUpdateWidget(RCalendarWidget oldWidget) {
-    if (widget.controller.selectedDate.month !=
-        widget.controller.displayedMonthDate.month ||
-        widget.controller.selectedDate.year !=
-            widget.controller.displayedMonthDate.year) {
-      widget.controller.controller.jumpToPage(widget.controller.selectedPage);
+    if (widget.controller.isMultiple == false) {
+      DateTime firstDate = widget.controller.selectedDate;
+      if (firstDate != null) {
+        if (firstDate.month != widget.controller.displayedMonthDate.month ||
+            firstDate.year != widget.controller.displayedMonthDate.year) {
+          widget.controller.controller
+              .jumpToPage(widget.controller.selectedPage);
+        }
+      }
     }
+
     super.didUpdateWidget(oldWidget);
   }
 
@@ -129,11 +132,11 @@ class _RCalendarWidgetState extends State<RCalendarWidget> {
 
   @override
   Widget build(BuildContext context) {
-    double maxHeight = widget.customWidget.childHeight * _getSelectRowCount() +
-        1;
+    double maxHeight =
+        widget.customWidget.childHeight * _getSelectRowCount() + 1;
     //获取星期的第一天
     final MaterialLocalizations localizations =
-    MaterialLocalizations.of(context);
+        MaterialLocalizations.of(context);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -150,7 +153,8 @@ class _RCalendarWidgetState extends State<RCalendarWidget> {
             SizedBox(
               width: 16,
             ),
-            widget.customWidget.buildMonthYear(widget.controller.displayedMonthDate),
+            widget.customWidget
+                .buildMonthYear(widget.controller.displayedMonthDate),
             SizedBox(
               width: 16,
             ),
@@ -169,6 +173,7 @@ class _RCalendarWidgetState extends State<RCalendarWidget> {
           duration: Duration(milliseconds: 300),
           height: maxHeight,
           child: PageView.builder(
+            key: ValueKey(widget.controller),
             controller: widget.controller.controller,
             itemBuilder: _builderItems,
             onPageChanged: _handleMonthPageChanged,
@@ -183,7 +188,7 @@ class _RCalendarWidgetState extends State<RCalendarWidget> {
     final DateTime month = _addMonthsToMonthDate(widget.firstDate, index);
     return RCalendarWidgetItem(
       key: ValueKey<DateTime>(month),
-      selectedDate: widget.controller.selectedDate,
+      selectedDates: widget.controller.selectedDates,
       customWidget: widget.customWidget,
       currentDate: _toDayDate,
       onChanged: _handleDayChanged,
