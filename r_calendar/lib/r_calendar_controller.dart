@@ -153,15 +153,12 @@ class RCalendarController extends ChangeNotifier {
 //          a.millisecondsSinceEpoch > b.millisecondsSinceEpoch ? 0 : 1);
           if (selectedDate != selectedDates.first &&
               selectedDate != selectedDates.last) {
-            final int length = selectedDates.length;
             final int index = selectedDates.indexOf(selectedDate);
             Duration duration1 = selectedDate.difference(selectedDates.first);
             Duration duration2 = selectedDates.last.difference(selectedDate);
             if (duration1.inMilliseconds < duration2.inMilliseconds) {
-              print('移除后面');
               selectedDates.removeRange(index + 1, selectedDates.length);
             } else {
-              print('移除前面');
               selectedDates.removeRange(0, index);
             }
           }

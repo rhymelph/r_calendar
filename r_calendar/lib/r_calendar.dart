@@ -141,31 +141,7 @@ class _RCalendarWidgetState extends State<RCalendarWidget> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            IconButton(
-              icon: widget.customWidget.buildLeftIndicator(),
-              onPressed: () {
-                widget.controller.previousPage();
-              },
-            ),
-            SizedBox(
-              width: 16,
-            ),
-            widget.customWidget
-                .buildMonthYear(widget.controller.displayedMonthDate),
-            SizedBox(
-              width: 16,
-            ),
-            IconButton(
-              icon: widget.customWidget.buildRightIndicator(),
-              onPressed: () {
-                widget.controller.nextPage();
-              },
-            ),
-          ],
-        ),
+        widget.customWidget.buildTopWidget(widget.controller) ?? Container(),
         Row(
           children: widget.customWidget.buildWeekListWidget(localizations),
         ),

@@ -66,17 +66,9 @@ class MyRCalendarCustomWidget extends RCalendarCustomWidget {
   Widget buildDateTime(DateTime time, List<RCalendarType> types){...};
 
   //   <  2019 year 11 month >
-  //build year and month
+  //build year and month and left 、 right Indicator
   @override
-  Widget buildMonthYear(DateTime time){...};
-
-  //build left indicator
-  @override
-  Widget buildLeftIndicator(){...};
-
-  //build right indicator
-  @override
-  Widget buildRightIndicator(){...};
+  Widget buildTopWidget(RCalendarController controller){...};
 
   //is unable will not have tap events
   @override
@@ -222,17 +214,9 @@ class MyRCalendarCustomWidget extends RCalendarCustomWidget {
   Widget buildDateTime(DateTime time, List<RCalendarType> types){...};
 
   //   <  2019年 11月 >
-  //构建年份和月份
+  //构建年份和月份 左指示器、右指示器，返回null就没有
   @override
-  Widget buildMonthYear(DateTime time){...};
-
-  //构建左指示器
-  @override
-  Widget buildLeftIndicator(){...};
-
-  //构建右指示器
-  @override
-  Widget buildRightIndicator(){...};
+  Widget buildTopWidget(RCalendarController controller){...};
 
   //是否不可用,不可用时，无点击事件
   @override

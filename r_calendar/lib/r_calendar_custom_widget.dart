@@ -5,6 +5,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:r_calendar/r_calendar.dart';
 
 enum RCalendarType {
   //正常
@@ -29,15 +30,9 @@ abstract class RCalendarCustomWidget {
   //构建普通的日期
   Widget buildDateTime(DateTime time, List<RCalendarType> types);
 
-  //   <  2019年 11月 >
-  //构建年份和月份
-  Widget buildMonthYear(DateTime time);
-
-  //构建左指示器
-  Widget buildLeftIndicator();
-
-  //构建右指示器
-  Widget buildRightIndicator();
+  // <  2019年 11月 >
+  //构建年份和月份,指示器
+  Widget buildTopWidget(RCalendarController controller);
 
   //是否不可用,不可用时，无点击事件
   bool isUnable(DateTime time, bool isSameMonth);
@@ -99,24 +94,6 @@ class DefaultRCalendarCustomWidget extends RCalendarCustomWidget {
   }
 
   @override
-  Widget buildLeftIndicator() {
-    return Icon(Icons.chevron_left);
-  }
-
-  @override
-  Widget buildMonthYear(DateTime time) {
-    return Text(
-      DateFormat('yyyy-MM').format(time),
-      style: TextStyle(color: Colors.red, fontSize: 18),
-    );
-  }
-
-  @override
-  Widget buildRightIndicator() {
-    return Icon(Icons.chevron_right);
-  }
-
-  @override
   List<Widget> buildWeekListWidget(MaterialLocalizations localizations) {
     return ['日', '一', '二', '三', '四', '五', '六']
         .map(
@@ -148,5 +125,36 @@ class DefaultRCalendarCustomWidget extends RCalendarCustomWidget {
   @override
   bool isUnable(DateTime time, bool isSameMonth) {
     return isSameMonth;
+  }
+
+  @override
+  Widget buildTopWidget(RCalendarController controller) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        IconButton(
+          icon: Icon(Icons.chevron_left),
+          onPressed: () {
+            controller.previousPage();
+          },
+        ),
+        SizedBox(
+          width: 16,
+        ),
+        Text(
+          DateFormat('yyyy-MM').format(controller.displayedMonthDate),
+          style: TextStyle(color: Colors.red, fontSize: 18),
+        ),
+        SizedBox(
+          width: 16,
+        ),
+        IconButton(
+          icon: Icon(Icons.chevron_left),
+          onPressed: () {
+            controller.nextPage();
+          },
+        ),
+      ],
+    );
   }
 }
