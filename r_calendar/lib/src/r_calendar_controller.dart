@@ -4,7 +4,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
-import 'package:r_calendar/r_calendar_utils.dart';
+import 'package:r_calendar/src/r_calendar_utils.dart';
 
 class RCalendarController extends ChangeNotifier {
   RCalendarController.single({DateTime selectedDate, bool isAutoSelect})
@@ -72,6 +72,9 @@ class RCalendarController extends ChangeNotifier {
     notifyListeners();
   }
 
+  // 散选中的日期
+  DateTime _dispersionSelect;
+
   //是否为多选
   bool _isMultiple;
 
@@ -87,6 +90,7 @@ class RCalendarController extends ChangeNotifier {
     }
     notifyListeners();
   }
+
 
   void initial(DateTime firstDate, DateTime endDate) {
     this.firstDate = firstDate;
@@ -123,10 +127,10 @@ class RCalendarController extends ChangeNotifier {
         curve: curve ?? Curves.linear);
   }
 
-  //跳转到DateTIme
+  //跳转到DateTime
   void jumpTo(DateTime dateTime) {
     final int monthPage = _monthDelta(firstDate, dateTime);
-    controller.jumpToPage(monthPage);
+    controller?.jumpToPage(monthPage);
   }
 
   //计算页数
@@ -142,10 +146,17 @@ class RCalendarController extends ChangeNotifier {
         monthDate.year + monthsToAdd ~/ 12, monthDate.month + monthsToAdd % 12);
   }
 
+  /// when you select the dateTime ,will use this method
+  ///
+  /// [selectedDate] your select dateTime
+  ///
   void updateSelected(DateTime selectedDate) {
     if (isMultiple) {
+      // multiple select
       if (selectedDates.contains(selectedDate)) {
+        // your select dateTime in your selectedDates
         if (_isDispersion) {
+          // dispersion select only remove
           selectedDates.remove(selectedDate);
         } else {
 //          //进行移除

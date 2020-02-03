@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:r_calendar/r_calendar_utils.dart';
+import 'package:r_calendar/src/r_calendar_utils.dart';
 import 'r_calendar_controller.dart';
 import 'r_calendar_custom_widget.dart';
 
@@ -83,10 +83,10 @@ class RCalendarWidgetItem extends StatelessWidget {
               }
               onChanged(dayToBuild);
             },
-            child: customWidget.buildDateTime(dayToBuild, types),
+            child: customWidget.buildDateTime(context,dayToBuild, types),
           ));
         } else {
-          labels.add(customWidget.buildDateTime(dayToBuild, types));
+          labels.add(customWidget.buildDateTime(context,dayToBuild, types));
         }
       } else if (day > dayInMonth) {
         //大于当月的日期
@@ -110,10 +110,10 @@ class RCalendarWidgetItem extends StatelessWidget {
               }
               onChanged(dayToBuild);
             },
-            child: customWidget.buildDateTime(dayToBuild, types),
+            child: customWidget.buildDateTime(context,dayToBuild, types),
           ));
         } else {
-          labels.add(customWidget.buildDateTime(dayToBuild, types));
+          labels.add(customWidget.buildDateTime(context,dayToBuild, types));
         }
       } else {
         List<RCalendarType> types = [RCalendarType.disable];
@@ -156,10 +156,10 @@ class RCalendarWidgetItem extends StatelessWidget {
               }
               onChanged(dayToBuild);
             },
-            child: customWidget.buildDateTime(dayToBuild, types),
+            child: customWidget.buildDateTime(context,dayToBuild, types),
           ));
         } else {
-          labels.add(customWidget.buildDateTime(dayToBuild, types));
+          labels.add(customWidget.buildDateTime(context,dayToBuild, types));
         }
       }
     }

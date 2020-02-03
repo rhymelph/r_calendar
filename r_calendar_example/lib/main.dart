@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:r_calendar/r_calendar.dart';
+import 'package:r_calendar_example/l10n/s.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -11,6 +23,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      localizationsDelegates: [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate
+      ],
+      supportedLocales: [Locale('zh', ''), Locale('en', '')],
       home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -35,20 +53,18 @@ class _MyHomePageState extends State<MyHomePage> {
       DateTime(2019, 12, 1),
       DateTime(2019, 12, 2),
       DateTime(2019, 12, 3),
-    ],isDispersion: false)
-    ..addListener((){
-      // controller.isMultiple
+    ], isDispersion: false)
+      ..addListener(() {
+        // controller.isMultiple
 
-      // single selected
-      // controller.isAutoSelect
-      // controller.selectedDate;
+        // single selected
+        // controller.isAutoSelect
+        // controller.selectedDate;
 
-      // multiple selected
-      // controller.selectedDates;
-      // controller.isDispersion;
-
-    });
-
+        // multiple selected
+        // controller.selectedDates;
+        // controller.isDispersion;
+      });
   }
 
   @override
@@ -59,7 +75,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print('build');
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -96,11 +111,20 @@ class _MyHomePageState extends State<MyHomePage> {
                       controller.isMultiple = !controller.isMultiple;
                     });
                   },
+                  tooltip: controller.isMultiple
+                      ? S.of(context).more
+                      : S.of(context).single,
                   child: Text(
-                    controller.isMultiple ? '多' : '单',
+                    controller.isMultiple
+                        ? S.of(context).more
+                        : S.of(context).single,
                     style: TextStyle(
                       color: Colors.white,
                     ),
+                    maxLines: 1,
+                    semanticsLabel: controller.isMultiple
+                        ? S.of(context).more
+                        : S.of(context).single,
                   ),
                 ),
                 SizedBox(
@@ -112,11 +136,20 @@ class _MyHomePageState extends State<MyHomePage> {
                       controller.isDispersion = !controller.isDispersion;
                     });
                   },
+                  tooltip: controller.isDispersion
+                      ? S.of(context).alone
+                      : S.of(context).together,
                   child: Text(
-                    controller.isDispersion ? '散' : '聚',
+                    controller.isDispersion
+                        ? S.of(context).alone
+                        : S.of(context).together,
                     style: TextStyle(
                       color: Colors.white,
                     ),
+                    maxLines: 1,
+                    semanticsLabel: controller.isDispersion
+                        ? S.of(context).alone
+                        : S.of(context).together,
                   ),
                 ),
               ]
@@ -127,11 +160,20 @@ class _MyHomePageState extends State<MyHomePage> {
                       controller.isMultiple = !controller.isMultiple;
                     });
                   },
+                  tooltip: controller.isMultiple
+                      ? S.of(context).more
+                      : S.of(context).single,
                   child: Text(
-                    controller.isMultiple ? '多' : '单',
+                    controller.isMultiple
+                        ? S.of(context).more
+                        : S.of(context).single,
                     style: TextStyle(
                       color: Colors.white,
                     ),
+                    maxLines: 1,
+                    semanticsLabel: controller.isMultiple
+                        ? S.of(context).more
+                        : S.of(context).single,
                   ),
                 ),
                 SizedBox(
@@ -143,11 +185,20 @@ class _MyHomePageState extends State<MyHomePage> {
                       controller.isAutoSelect = !controller.isAutoSelect;
                     });
                   },
+                  tooltip: controller.isAutoSelect
+                      ? S.of(context).automatic
+                      : S.of(context).manual,
                   child: Text(
-                    controller.isAutoSelect ? '自' : '手',
+                    controller.isAutoSelect
+                        ? S.of(context).automatic
+                        : S.of(context).manual,
                     style: TextStyle(
                       color: Colors.white,
                     ),
+                    maxLines: 1,
+                    semanticsLabel: controller.isAutoSelect
+                        ? S.of(context).automatic
+                        : S.of(context).manual,
                   ),
                 ),
                 SizedBox(
@@ -160,6 +211,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           controller.selectedDate.add(Duration(days: 1));
                     });
                   },
+                  tooltip: S.of(context).add,
                   child: Icon(Icons.add),
                 ),
                 SizedBox(
@@ -172,6 +224,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           controller.selectedDate.subtract(Duration(days: 1));
                     });
                   },
+                  tooltip: S.of(context).reduce,
                   child: Icon(Icons.remove),
                 )
               ],

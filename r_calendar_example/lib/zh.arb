@@ -1,0 +1,10 @@
+{
+  "more":"多选",
+  "single":"单选",
+  "alone":"单独",
+  "together":"一起",
+  "add":"加",
+  "reduce":"减",
+  "automatic":"自动",
+  "manual":"手动"
+}

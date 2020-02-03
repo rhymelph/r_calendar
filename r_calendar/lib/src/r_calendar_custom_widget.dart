@@ -24,15 +24,15 @@ abstract class RCalendarCustomWidget {
   // 如果你想设置第一天是星期一，请更改MaterialLocalizations 的firstDayOfWeekIndex
   // 日 一 二 三 四 五 六
   //构建头部
-  List<Widget> buildWeekListWidget(MaterialLocalizations localizations);
+  List<Widget> buildWeekListWidget(BuildContext context,MaterialLocalizations localizations);
 
   // 1 2 3 4 5 6 7
   //构建普通的日期
-  Widget buildDateTime(DateTime time, List<RCalendarType> types);
+  Widget buildDateTime(BuildContext context, DateTime time, List<RCalendarType> types);
 
   // <  2019年 11月 >
   //构建年份和月份,指示器
-  Widget buildTopWidget(RCalendarController controller);
+  Widget buildTopWidget(BuildContext context,RCalendarController controller);
 
   //是否不可用,不可用时，无点击事件
   bool isUnable(DateTime time, bool isSameMonth);
@@ -46,7 +46,7 @@ abstract class RCalendarCustomWidget {
 
 class DefaultRCalendarCustomWidget extends RCalendarCustomWidget {
   @override
-  Widget buildDateTime(DateTime time, List<RCalendarType> types) {
+  Widget buildDateTime(BuildContext context,DateTime time, List<RCalendarType> types) {
     TextStyle childStyle;
     BoxDecoration decoration;
 
@@ -84,29 +84,34 @@ class DefaultRCalendarCustomWidget extends RCalendarCustomWidget {
       );
     }
 
-    return Container(
-        decoration: decoration,
-        alignment: Alignment.center,
-        child: Text(
-          time.day.toString(),
-          style: childStyle,
-        ));
+    return Tooltip(
+      message: MaterialLocalizations.of(context).formatFullDate(time),
+      child: Container(
+          decoration: decoration,
+          alignment: Alignment.center,
+          child: Text(
+            time.day.toString(),
+            style: childStyle,
+          )),
+    );
   }
 
   @override
-  List<Widget> buildWeekListWidget(MaterialLocalizations localizations) {
-    return ['日', '一', '二', '三', '四', '五', '六']
+  List<Widget> buildWeekListWidget(BuildContext context,MaterialLocalizations localizations) {
+    return localizations.narrowWeekdays
         .map(
           (d) => Expanded(
-            child: Container(
-              height: 60,
-              alignment: Alignment.center,
-              child: Text(
-                d,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600),
+            child: ExcludeSemantics(
+              child: Container(
+                height: 60,
+                alignment: Alignment.center,
+                child: Text(
+                  d,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600),
+                ),
               ),
             ),
           ),
@@ -128,7 +133,7 @@ class DefaultRCalendarCustomWidget extends RCalendarCustomWidget {
   }
 
   @override
-  Widget buildTopWidget(RCalendarController controller) {
+  Widget buildTopWidget(BuildContext context,RCalendarController controller) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -149,7 +154,7 @@ class DefaultRCalendarCustomWidget extends RCalendarCustomWidget {
           width: 16,
         ),
         IconButton(
-          icon: Icon(Icons.chevron_left),
+          icon: Icon(Icons.chevron_right),
           onPressed: () {
             controller.nextPage();
           },

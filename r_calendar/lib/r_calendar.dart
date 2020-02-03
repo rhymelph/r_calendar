@@ -7,14 +7,14 @@ library r_calendar;
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:r_calendar/r_calendar_utils.dart';
-import 'package:r_calendar/r_calendar_widget_item.dart';
+import 'package:r_calendar/src/r_calendar_utils.dart';
+import 'package:r_calendar/src/r_calendar_widget_item.dart';
 
-import 'r_calendar_controller.dart';
-import 'r_calendar_custom_widget.dart';
-export 'r_calendar_controller.dart';
-export 'r_calendar_custom_widget.dart';
-export 'r_calendar_widget_item.dart';
+import 'src/r_calendar_controller.dart';
+import 'src/r_calendar_custom_widget.dart';
+export 'src/r_calendar_controller.dart';
+export 'src/r_calendar_custom_widget.dart';
+export 'src/r_calendar_widget_item.dart';
 
 class RCalendarWidget extends StatefulWidget {
   // 最小日期
@@ -141,9 +141,9 @@ class _RCalendarWidgetState extends State<RCalendarWidget> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        widget.customWidget.buildTopWidget(widget.controller) ?? Container(),
+        widget.customWidget.buildTopWidget(context,widget.controller) ?? Container(),
         Row(
-          children: widget.customWidget.buildWeekListWidget(localizations),
+          children: widget.customWidget.buildWeekListWidget(context,localizations),
         ),
         AnimatedContainer(
           duration: Duration(milliseconds: 300),
