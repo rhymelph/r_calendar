@@ -49,13 +49,20 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    controller = RCalendarController.multiple(selectedDates: [
-      DateTime(2019, 12, 1),
-      DateTime(2019, 12, 2),
-      DateTime(2019, 12, 3),
-    ], isDispersion: false)
+    controller =
+//    RCalendarController.multiple(
+//      selectedDates: [
+//        DateTime(2019, 12, 1),
+//        DateTime(2019, 12, 2),
+//        DateTime(2019, 12, 3),
+//      ],
+//      isDispersion: false,
+//    )
+    RCalendarController.single(
+      isAutoSelect: true,
+//      selectedDate: DateTime.now(),
+    )
       ..addListener(() {
-        print(controller.displayedMonthDate);
         // controller.isMultiple
 
         // single selected
@@ -119,9 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ? S.of(context).month
                 : S.of(context).week,
             child: Text(
-              controller.isMonthMode
-                  ? S.of(context).month
-                  : S.of(context).week,
+              controller.isMonthMode ? S.of(context).month : S.of(context).week,
               style: TextStyle(
                 color: Colors.white,
               ),

@@ -60,7 +60,7 @@ class RCalendarController extends ChangeNotifier {
     assert(isAutoSelect != null, 'is audo select not null');
     this._isAutoSelect = isAutoSelect;
     notifyListeners();
-}
+  }
 
   //是否为散选
   bool _isDispersion;
@@ -110,7 +110,7 @@ class RCalendarController extends ChangeNotifier {
     } else {
       if (_mode != mode) {
         _mode = mode;
-        jumpTo(selectedDate);
+        jumpTo(selectedDate ?? displayedMonthDate);
         notifyListeners();
       }
     }
@@ -273,12 +273,12 @@ class RCalendarController extends ChangeNotifier {
   }
 
   //更新display日期
-  void updateDisplayedDate(int page,RCalendarMode mode) {
-    if(mode!=_mode) return;
+  void updateDisplayedDate(int page, RCalendarMode mode) {
+    if (mode != _mode) return;
 
     if (isMonthMode) {
       displayedMonthDate = RCalendarUtils.addMonthsToMonthDate(firstDate, page);
-      if (isAutoSelect && isMultiple == false) {
+      if (isAutoSelect && isMultiple == false && selectedDate != null) {
         int daysInMonth = RCalendarUtils.getDaysInMonth(
             displayedMonthDate.year, displayedMonthDate.month);
         int day = math.min(daysInMonth, this.selectedDate.day);
@@ -288,7 +288,7 @@ class RCalendarController extends ChangeNotifier {
     } else {
       displayedMonthDate =
           RCalendarUtils.addWeeksToWeeksDate(firstDate, page, _localizations);
-      if (isAutoSelect && isMultiple == false) {
+      if (isAutoSelect && isMultiple == false && selectedDate != null) {
         bool isBefore = this.selectedDate.isBefore(displayedMonthDate);
         bool isAfter = this
             .selectedDate
