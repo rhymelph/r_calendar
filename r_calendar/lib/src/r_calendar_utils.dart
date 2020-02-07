@@ -797,13 +797,14 @@ class RCalendarUtils {
   }
 
   /// 星期总页数
-  static int weekDelta(DateTime startDate, DateTime endDate,MaterialLocalizations localizations) {
+  static int weekDelta(DateTime startDate, DateTime endDate,
+      MaterialLocalizations localizations) {
     final int firstDayOffset =
         computeFirstDayOffset(startDate.year, startDate.month, localizations);
     Duration diff = DateTime(endDate.year, endDate.month, endDate.day)
         .difference(DateTime(startDate.year, startDate.month, startDate.day));
     int days = diff.inDays + firstDayOffset + 1;
-    return (days/7).ceil() -1;
+    return (days / 7).ceil() - 1;
   }
 
   ///****************************农历工具类****************************///

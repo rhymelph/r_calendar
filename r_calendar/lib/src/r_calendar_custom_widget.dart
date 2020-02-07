@@ -24,21 +24,23 @@ abstract class RCalendarCustomWidget {
   // 如果你想设置第一天是星期一，请更改MaterialLocalizations 的firstDayOfWeekIndex
   // 日 一 二 三 四 五 六
   //构建头部
-  List<Widget> buildWeekListWidget(BuildContext context,MaterialLocalizations localizations);
+  List<Widget> buildWeekListWidget(
+      BuildContext context, MaterialLocalizations localizations);
 
   // 1 2 3 4 5 6 7
   //构建普通的日期
-  Widget buildDateTime(BuildContext context, DateTime time, List<RCalendarType> types);
+  Widget buildDateTime(
+      BuildContext context, DateTime time, List<RCalendarType> types);
 
   // <  2019年 11月 >
   //构建年份和月份,指示器
-  Widget buildTopWidget(BuildContext context,RCalendarController controller);
+  Widget buildTopWidget(BuildContext context, RCalendarController controller);
 
   //是否不可用,不可用时，无点击事件
   bool isUnable(DateTime time, bool isSameMonth);
 
   //点击拦截，当返回true时进行拦截，就不会改变选中日期
-  FutureOr<bool> clickInterceptor(BuildContext context,DateTime dateTime);
+  FutureOr<bool> clickInterceptor(BuildContext context, DateTime dateTime);
 
   //子view的高度
   double get childHeight;
@@ -46,7 +48,8 @@ abstract class RCalendarCustomWidget {
 
 class DefaultRCalendarCustomWidget extends RCalendarCustomWidget {
   @override
-  Widget buildDateTime(BuildContext context,DateTime time, List<RCalendarType> types) {
+  Widget buildDateTime(
+      BuildContext context, DateTime time, List<RCalendarType> types) {
     TextStyle childStyle;
     BoxDecoration decoration;
 
@@ -96,7 +99,8 @@ class DefaultRCalendarCustomWidget extends RCalendarCustomWidget {
   }
 
   @override
-  List<Widget> buildWeekListWidget(BuildContext context,MaterialLocalizations localizations) {
+  List<Widget> buildWeekListWidget(
+      BuildContext context, MaterialLocalizations localizations) {
     return localizations.narrowWeekdays
         .map(
           (d) => Expanded(
@@ -122,7 +126,7 @@ class DefaultRCalendarCustomWidget extends RCalendarCustomWidget {
   double get childHeight => 50;
 
   @override
-  FutureOr<bool> clickInterceptor(BuildContext context,DateTime dateTime) {
+  FutureOr<bool> clickInterceptor(BuildContext context, DateTime dateTime) {
     return false;
   }
 
@@ -132,7 +136,7 @@ class DefaultRCalendarCustomWidget extends RCalendarCustomWidget {
   }
 
   @override
-  Widget buildTopWidget(BuildContext context,RCalendarController controller) {
+  Widget buildTopWidget(BuildContext context, RCalendarController controller) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[

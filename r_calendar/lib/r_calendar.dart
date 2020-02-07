@@ -29,11 +29,12 @@ class RCalendarWidget extends StatefulWidget {
   //自定义部件
   final RCalendarCustomWidget customWidget;
 
-  const RCalendarWidget({Key key,
-    this.firstDate,
-    this.lastDate,
-    this.controller,
-    this.customWidget})
+  const RCalendarWidget(
+      {Key key,
+      this.firstDate,
+      this.lastDate,
+      this.controller,
+      this.customWidget})
       : super(key: key);
 
   @override
@@ -58,10 +59,10 @@ class _RCalendarWidgetState extends State<RCalendarWidget> {
   void _updateCurrentDate() {
     _toDayDate = DateTime.now();
     final DateTime tomorrow =
-    DateTime(_toDayDate.year, _toDayDate.month, _toDayDate.day + 1);
+        DateTime(_toDayDate.year, _toDayDate.month, _toDayDate.day + 1);
     Duration timeUntilTomorrow = tomorrow.difference(_toDayDate);
     timeUntilTomorrow +=
-    const Duration(seconds: 1); // so we don't miss it by rounding
+        const Duration(seconds: 1); // so we don't miss it by rounding
     _timer?.cancel();
     _timer = Timer(timeUntilTomorrow, () {
       setState(() {
@@ -132,7 +133,7 @@ class _RCalendarWidgetState extends State<RCalendarWidget> {
         widget.customWidget.childHeight * _getSelectRowCount() + 1;
     //获取星期的第一天
     final MaterialLocalizations localizations =
-    MaterialLocalizations.of(context);
+        MaterialLocalizations.of(context);
     return RCalendarMarker(
       customWidget: widget.customWidget,
       toDayDate: _toDayDate,
@@ -145,7 +146,7 @@ class _RCalendarWidgetState extends State<RCalendarWidget> {
               Container(),
           Row(
             children:
-            widget.customWidget.buildWeekListWidget(context, localizations),
+                widget.customWidget.buildWeekListWidget(context, localizations),
           ),
           AnimatedContainer(
             duration: Duration(milliseconds: 300),
@@ -181,7 +182,7 @@ class _RCalendarWidgetState extends State<RCalendarWidget> {
 
   Widget _builderMonthItems(BuildContext context, int index) {
     final DateTime month =
-    RCalendarUtils.addMonthsToMonthDate(widget.firstDate, index);
+        RCalendarUtils.addMonthsToMonthDate(widget.firstDate, index);
     return RCalendarMonthItem(
       monthDate: month,
     );
@@ -212,15 +213,14 @@ class RCalendarMarker extends InheritedNotifier<RCalendarController> {
     @required this.customWidget,
     @required RCalendarController controller,
     @required Widget child,
-  })
-      : assert(controller != null),
+  })  : assert(controller != null),
         assert(child != null),
         super(notifier: controller, child: child);
 
   static RCalendarMarker of(BuildContext context, {bool nullOk: false}) {
     assert(context != null);
     final RCalendarMarker inherited =
-    context.dependOnInheritedWidgetOfExactType<RCalendarMarker>();
+        context.dependOnInheritedWidgetOfExactType<RCalendarMarker>();
     assert(() {
       if (nullOk) {
         return true;
@@ -228,12 +228,12 @@ class RCalendarMarker extends InheritedNotifier<RCalendarController> {
       if (inherited == null) {
         throw FlutterError(
             'Unable to find a $RCalendarMarker widget in the context.\n'
-                '$RCalendarMarker.of() was called with a context that does not contain a '
-                '$RCalendarMarker widget.\n'
-                'No $RCalendarMarker ancestor could be found starting from the context that was '
-                'passed to $RCalendarMarker.of().\n'
-                'The context used was:\n'
-                '  $context');
+            '$RCalendarMarker.of() was called with a context that does not contain a '
+            '$RCalendarMarker widget.\n'
+            'No $RCalendarMarker ancestor could be found starting from the context that was '
+            'passed to $RCalendarMarker.of().\n'
+            'The context used was:\n'
+            '  $context');
       }
       return true;
     }());

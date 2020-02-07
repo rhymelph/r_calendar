@@ -58,21 +58,20 @@ class _MyHomePageState extends State<MyHomePage> {
 //      ],
 //      isDispersion: false,
 //    )
-    RCalendarController.single(
+        RCalendarController.single(
       isAutoSelect: true,
 //      selectedDate: DateTime.now(),
-    )
-      ..addListener(() {
-        // controller.isMultiple
+    )..addListener(() {
+            // controller.isMultiple
 
-        // single selected
-        // controller.isAutoSelect
-        // controller.selectedDate;
+            // single selected
+            // controller.isAutoSelect
+            // controller.selectedDate;
 
-        // multiple selected
-        // controller.selectedDates;
-        // controller.isDispersion;
-      });
+            // multiple selected
+            // controller.selectedDates;
+            // controller.isDispersion;
+          });
   }
 
   @override
