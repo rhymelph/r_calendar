@@ -30,4 +30,10 @@ class $en extends S {
 
   @override
   String get manual => r'manual';
+
+  @override
+  String get month => r'month';
+
+  @override
+  String get week => r'week';
 }

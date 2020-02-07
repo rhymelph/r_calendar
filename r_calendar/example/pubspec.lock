@@ -152,7 +152,7 @@ packages:
   r_calendar:
     dependency: "direct main"
     description:
-      path: "../r_calendar"
+      path: ".."
       relative: true
     source: path
     version: "0.1.3"

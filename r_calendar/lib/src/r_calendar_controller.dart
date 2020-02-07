@@ -6,23 +6,35 @@ import 'dart:math' as math;
 
 import 'package:r_calendar/src/r_calendar_utils.dart';
 
+enum RCalendarMode {
+  week,
+  month,
+}
+
 class RCalendarController extends ChangeNotifier {
-  RCalendarController.single({DateTime selectedDate, bool isAutoSelect})
+  RCalendarController.single(
+      {RCalendarMode mode, DateTime selectedDate, bool isAutoSelect})
       : selectedDates = selectedDate != null ? [selectedDate] : [],
         _isMultiple = false,
         _isDispersion = true,
-        _isAutoSelect = isAutoSelect ?? true;
+        _isAutoSelect = isAutoSelect ?? true,
+        _mode = mode ?? RCalendarMode.month;
 
-  RCalendarController.multiple({this.selectedDates, bool isDispersion})
+  RCalendarController.multiple(
+      {RCalendarMode mode, this.selectedDates, bool isDispersion})
       : _isMultiple = true,
         _isDispersion = isDispersion ?? true,
-        _isAutoSelect = false;
+        _isAutoSelect = false,
+        _mode = mode ?? RCalendarMode.month;
 
   //当前显示的月份
   DateTime displayedMonthDate;
 
-  //page view 视图控制器
-  PageController controller;
+  // 月视图控制器
+  PageController monthController;
+
+  // 星期视图控制器
+  PageController weekController;
 
   DateTime firstDate;
 
@@ -48,7 +60,7 @@ class RCalendarController extends ChangeNotifier {
     assert(isAutoSelect != null, 'is audo select not null');
     this._isAutoSelect = isAutoSelect;
     notifyListeners();
-  }
+}
 
   //是否为散选
   bool _isDispersion;
@@ -72,9 +84,6 @@ class RCalendarController extends ChangeNotifier {
     notifyListeners();
   }
 
-  // 散选中的日期
-  DateTime _dispersionSelect;
-
   //是否为多选
   bool _isMultiple;
 
@@ -91,8 +100,27 @@ class RCalendarController extends ChangeNotifier {
     notifyListeners();
   }
 
+  RCalendarMode _mode;
 
-  void initial(DateTime firstDate, DateTime endDate) {
+  RCalendarMode get mode => _mode;
+
+  set mode(RCalendarMode mode) {
+    if (_mode == null) {
+      _mode = mode;
+    } else {
+      if (_mode != mode) {
+        _mode = mode;
+        jumpTo(selectedDate);
+        notifyListeners();
+      }
+    }
+  }
+
+  bool get isMonthMode => _mode == RCalendarMode.month;
+
+  MaterialLocalizations _localizations;
+
+  void initial(BuildContext context, DateTime firstDate, DateTime endDate) {
     this.firstDate = firstDate;
     this.lastDate = endDate;
     if (isMultiple) {
@@ -105,8 +133,14 @@ class RCalendarController extends ChangeNotifier {
       selectedDates ??= [DateTime.now()];
     }
     displayedMonthDate = selectedDate ?? DateTime.now();
-    final int monthPage = _monthDelta(firstDate, displayedMonthDate);
-    controller = PageController(initialPage: monthPage);
+    final int monthPage =
+        RCalendarUtils.monthDelta(firstDate, displayedMonthDate);
+    monthController = PageController(initialPage: monthPage);
+    _localizations = DefaultMaterialLocalizations();
+
+    final int weekPage =
+        RCalendarUtils.weekDelta(firstDate, displayedMonthDate, _localizations);
+    weekController = PageController(initialPage: weekPage);
 //    controller.addListener(() {
 //      displayMonth = _addMonthsToMonthDate(firstDate, controller.page ~/ 1);
 //      notifyListeners();
@@ -115,35 +149,40 @@ class RCalendarController extends ChangeNotifier {
 
   //下一页
   void nextPage({Duration duration, Curve curve}) {
-    controller?.nextPage(
-        duration: duration ?? Duration(milliseconds: 300),
-        curve: curve ?? Curves.linear);
+    if (isMonthMode) {
+      monthController?.nextPage(
+          duration: duration ?? Duration(milliseconds: 300),
+          curve: curve ?? Curves.linear);
+    } else {
+      weekController?.nextPage(
+          duration: duration ?? Duration(milliseconds: 300),
+          curve: curve ?? Curves.linear);
+    }
   }
 
   //上一页
   void previousPage({Duration duration, Curve curve}) {
-    controller?.previousPage(
-        duration: duration ?? Duration(milliseconds: 300),
-        curve: curve ?? Curves.linear);
+    if (isMonthMode) {
+      monthController?.previousPage(
+          duration: duration ?? Duration(milliseconds: 300),
+          curve: curve ?? Curves.linear);
+    } else {
+      weekController?.previousPage(
+          duration: duration ?? Duration(milliseconds: 300),
+          curve: curve ?? Curves.linear);
+    }
   }
 
   //跳转到DateTime
   void jumpTo(DateTime dateTime) {
-    final int monthPage = _monthDelta(firstDate, dateTime);
-    controller?.jumpToPage(monthPage);
-  }
-
-  //计算页数
-  int _monthDelta(DateTime startDate, DateTime endDate) {
-    return (endDate.year - startDate.year) * 12 +
-        endDate.month -
-        startDate.month;
-  }
-
-  /// 月份添加和减少
-  DateTime _addMonthsToMonthDate(DateTime monthDate, int monthsToAdd) {
-    return DateTime(
-        monthDate.year + monthsToAdd ~/ 12, monthDate.month + monthsToAdd % 12);
+    if (isMonthMode) {
+      final int monthPage = RCalendarUtils.monthDelta(firstDate, dateTime);
+      monthController?.jumpToPage(monthPage);
+    } else {
+      final int monthPage =
+          RCalendarUtils.weekDelta(firstDate, dateTime, _localizations);
+      weekController?.jumpToPage(monthPage);
+    }
   }
 
   /// when you select the dateTime ,will use this method
@@ -233,30 +272,57 @@ class RCalendarController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateDisplayedDate(int monthPage) {
-    displayedMonthDate = _addMonthsToMonthDate(firstDate, monthPage);
-    if (isAutoSelect && isMultiple == false) {
-      int daysInMonth = RCalendarUtils.getDaysInMonth(
-          displayedMonthDate.year, displayedMonthDate.month);
-      int day = math.min(daysInMonth, this.selectedDate.day);
-      this.selectedDate =
-          DateTime(displayedMonthDate.year, displayedMonthDate.month, day);
+  //更新display日期
+  void updateDisplayedDate(int page,RCalendarMode mode) {
+    if(mode!=_mode) return;
+
+    if (isMonthMode) {
+      displayedMonthDate = RCalendarUtils.addMonthsToMonthDate(firstDate, page);
+      if (isAutoSelect && isMultiple == false) {
+        int daysInMonth = RCalendarUtils.getDaysInMonth(
+            displayedMonthDate.year, displayedMonthDate.month);
+        int day = math.min(daysInMonth, this.selectedDate.day);
+        this.selectedDate =
+            DateTime(displayedMonthDate.year, displayedMonthDate.month, day);
+      }
+    } else {
+      displayedMonthDate =
+          RCalendarUtils.addWeeksToWeeksDate(firstDate, page, _localizations);
+      if (isAutoSelect && isMultiple == false) {
+        bool isBefore = this.selectedDate.isBefore(displayedMonthDate);
+        bool isAfter = this
+            .selectedDate
+            .isAfter(displayedMonthDate.add(Duration(days: 7)));
+        if (isBefore || isAfter) {
+//        this.selectedDate = displayedMonthDate.add(Duration(days: oldIndex));
+          this.selectedDate =
+              this.selectedDate.add(Duration(days: isBefore ? 7 : -7));
+        }
+      }
     }
     notifyListeners();
   }
 
   //最大的页数
-  int get maxPage => _monthDelta(firstDate, lastDate) + 1;
+  int get maxPage => isMonthMode
+      ? RCalendarUtils.monthDelta(firstDate, lastDate) + 1
+      : RCalendarUtils.weekDelta(firstDate, lastDate, _localizations) + 1;
 
   //选中的页数
-  int get selectedPage => _monthDelta(firstDate, selectedDates.first);
+  int get selectedPage => isMonthMode
+      ? RCalendarUtils.monthDelta(firstDate, selectedDate ?? displayedMonthDate)
+      : RCalendarUtils.weekDelta(
+          firstDate, selectedDate ?? displayedMonthDate, _localizations);
 
   //当前显示的页面
-  int get displayedPage => _monthDelta(firstDate, displayedMonthDate);
+  int get displayedPage => isMonthMode
+      ? RCalendarUtils.monthDelta(firstDate, displayedMonthDate)
+      : RCalendarUtils.weekDelta(firstDate, displayedMonthDate, _localizations);
 
   @override
   void dispose() {
-    controller.dispose();
+    monthController?.dispose();
+    weekController?.dispose();
     super.dispose();
   }
 }

@@ -7,5 +7,7 @@ void main() {
 //    expect(calculator.addOne(-7), -6);
 //    expect(calculator.addOne(0), 1);
 //    expect(() => calculator.addOne(null), throwsNoSuchMethodError);
+      print(DateTime.now().weekday);
+
   });
 }

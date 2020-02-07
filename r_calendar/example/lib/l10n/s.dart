@@ -32,6 +32,10 @@ class S implements WidgetsLocalizations {
   String get automatic => r'自动';
 
   String get manual => r'手动';
+
+  String get month => r'月';
+
+  String get week => r'周';
 }
 
 class _Delegate extends LocalizationsDelegate<S> {

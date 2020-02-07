@@ -6,5 +6,7 @@
   "add":"add",
   "reduce":"reduce",
   "automatic":"automatic",
-  "manual":"manual"
+  "manual":"manual",
+  "month":"month",
+  "week":"week"
 }

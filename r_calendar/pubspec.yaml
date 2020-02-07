@@ -1,6 +1,6 @@
 name: r_calendar
 description: A new Flutter package about calendar,you can use this design the calendar and support single or multiple selected.
-version: 0.1.3
+version: 0.1.4
 homepage: https://github.com/rhymelph/r_calendar
 
 environment:

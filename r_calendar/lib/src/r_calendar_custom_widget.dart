@@ -83,7 +83,6 @@ class DefaultRCalendarCustomWidget extends RCalendarCustomWidget {
         color: Colors.blue,
       );
     }
-
     return Tooltip(
       message: MaterialLocalizations.of(context).formatFullDate(time),
       child: Container(

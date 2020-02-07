@@ -6,5 +6,7 @@
   "add":"加",
   "reduce":"减",
   "automatic":"自动",
-  "manual":"手动"
+  "manual":"手动",
+  "month":"月",
+  "week":"周"
 }

@@ -30,4 +30,10 @@ class $zh extends S {
 
   @override
   String get manual => r'手动';
+
+  @override
+  String get month => r'月';
+
+  @override
+  String get week => r'周';
 }
