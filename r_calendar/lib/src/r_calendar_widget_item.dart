@@ -52,7 +52,7 @@ class RCalendarMonthItem extends StatelessWidget {
           labels.add(GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () async {
-              if (await data.customWidget.clickInterceptor(dayToBuild)) {
+              if (await data.customWidget.clickInterceptor(context,dayToBuild)) {
                 return;
               }
               data.onChanged(dayToBuild);
@@ -81,7 +81,7 @@ class RCalendarMonthItem extends StatelessWidget {
           labels.add(GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () async {
-              if (await data.customWidget.clickInterceptor(dayToBuild)) {
+              if (await data.customWidget.clickInterceptor(context,dayToBuild)) {
                 return;
               }
               data.onChanged(dayToBuild);
@@ -129,7 +129,7 @@ class RCalendarMonthItem extends StatelessWidget {
           labels.add(GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () async {
-              if (await data.customWidget.clickInterceptor(dayToBuild)) {
+              if (await data.customWidget.clickInterceptor(context,dayToBuild)) {
                 return;
               }
               data.onChanged(dayToBuild);
@@ -205,7 +205,7 @@ class RCalendarWeekItem extends StatelessWidget {
         labels.add(GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () async {
-            if (await data.customWidget.clickInterceptor(dayToBuild)) {
+            if (await data.customWidget.clickInterceptor(context,dayToBuild)) {
               return;
             }
             data.onChanged(dayToBuild);

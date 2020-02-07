@@ -38,7 +38,7 @@ abstract class RCalendarCustomWidget {
   bool isUnable(DateTime time, bool isSameMonth);
 
   //点击拦截，当返回true时进行拦截，就不会改变选中日期
-  FutureOr<bool> clickInterceptor(DateTime dateTime);
+  FutureOr<bool> clickInterceptor(BuildContext context,DateTime dateTime);
 
   //子view的高度
   double get childHeight;
@@ -122,7 +122,7 @@ class DefaultRCalendarCustomWidget extends RCalendarCustomWidget {
   double get childHeight => 50;
 
   @override
-  FutureOr<bool> clickInterceptor(DateTime dateTime) {
+  FutureOr<bool> clickInterceptor(BuildContext context,DateTime dateTime) {
     return false;
   }
 

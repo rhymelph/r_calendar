@@ -1,39 +1,38 @@
-# r_calendar
-
+## r_calendar
 [![pub package](https://img.shields.io/pub/v/r_calendar.svg)](https://pub.dartlang.org/packages/r_calendar)
 
-A new Flutter package about calendar,you can use this design the calendar and support single or multiple selected.
+一个日历插件，支持自定义日历，月视图/周视图切花、点击拦截、单选（切换月自动选）、多选（散选/聚选）
 
+## 1.如何使用.
 
-## [中文点此](README_ZH.md)
+- `pubspec.yaml`文件添加依赖
 
-## 1.Getting Started.
-
-- use plugin:
-add this code in `pubspec.yaml`
 ```yaml
 dependencies:
-  r_calendar: last version
+    r_calendar: last version
 ```
-- add the packages to your file.
+- 导入包
+
 ```dart
 import 'package:r_calendar/r_calendar.dart';
 
 ```
-- radio select
+- 单选控制器初始化
 ```dart
 ///
-/// [selectedDate] will default selected one
-/// [isAutoSelect] when the page view change will change month to auto select same day.
+/// [selectedDate] 默认选中的那天
+/// [isAutoSelect] 当月份改变时，是否自动选中对应的月份的同一天
+
     RCalendarController controller= RCalendarController.single(
                     selectedDate: DateTime.now(),
                     isAutoSelect: true,);
 ```
-- check select
+- 多选控制器初始化
 ```dart
 ///
-/// [selectedDates] will default selected more.
-/// [isDispersion] will selected continuity dateTime.
+/// [selectedDates] 默认选中的日期数组
+/// [isDispersion] 是否散选，否则为连续选中
+
     RCalendarController controller = RCalendarController.multiple(
                     selectedDates: [
                         DateTime(2019, 12, 1),
@@ -42,75 +41,90 @@ import 'package:r_calendar/r_calendar.dart';
                     ],
                     isDispersion: true);
 ```
-- value change listener
+- 周视图/月视图（默认月视图）
 ```dart
 ///
-/// addListener to observe value change
+/// [mode] 模式
+/// -   RCalendarMode.week 周视图模式
+/// -   RCalendarMode.month 月视图模式
+
+    RCalendarController controller = RCalendarController.single(
+                    mode:RCalendarMode.week);
+```
+- 数据变化监听
+```dart
+/// 添加监听器观察值的变化
     RCalendarController controller = RCalendarController.multiple(...)
-    addListener((){
+    ..addListener((){
+    // 是否为多选
     // controller.isMultiple
 
-    // single selected
+    // 单选下
+    // 当月份改变时，是否自动选中对应的月份的同一天
     // controller.isAutoSelect
+    // 当前选中的日期
     // controller.selectedDate;
 
-    // multiple selected
-    // controller.selectedDates;
+    // 多选
+    // 是否散选，否则为连续选中
     // controller.isDispersion;
+    // 当前选中的日期列表
+    // controller.selectedDates;
 
-    // mode month/week
+    // 周视图/月视图
     // controller.mode
     });
 ```
-- custom your widget
+- 自定义日历
 ```dart
 
 class MyRCalendarCustomWidget extends RCalendarCustomWidget {
-
-  // If you want to change first day is Monday ,you can change [MaterialLocalizations.firstDayOfWeekIndex]
-  // SUM MON TUE WED THU FRI SUT
-  //build your week header
+  // 如果你想设置第一天是星期一，请更改MaterialLocalizations 的firstDayOfWeekIndex
+  // 日 一 二 三 四 五 六
+  //构建头部
   @override
   List<Widget> buildWeekListWidget(BuildContext context,MaterialLocalizations localizations){...};
 
   // 1 2 3 4 5 6 7
-  //build normal dateTime
+  //构建普通的日期
   @override
-  Widget buildDateTime(BuildContext context, DateTime time, List<RCalendarType> types){...};
+  Widget buildDateTime(BuildContext context,DateTime time, List<RCalendarType> types){...};
 
-  //   <  2019 year 11 month >
-  //build year and month and left 、 right Indicator
+  //   <  2019年 11月 >
+  //构建年份和月份 左指示器、右指示器，返回null就没有
   @override
-  Widget buildTopWidget(BuildContext context, RCalendarController controller){...};
+  Widget buildTopWidget(BuildContext context,RCalendarController controller){...};
 
-
-  //is unable will not have tap events
+  //是否不可用,不可用时，无点击事件
   @override
   bool isUnable(DateTime time, bool isSameMonth){...};
 
-  //Click intercept. When it returns true to intercept, the selected date will not be changed
+  //点击拦截，当返回true时进行拦截，就不会改变选中日期
   @override
-  FutureOr<bool> clickInterceptor(BuildContext context, DateTime dateTime){...};
+  FutureOr<bool> clickInterceptor(BuildContext context,DateTime dateTime){...};
 
-  //Height of child view
+  //子view的高度
   @override
   double get childHeight=>{...};
 }
 ```
 
-## 2.Use this
+## 2.使用它.
+
 ```dart
 import 'package:flutter/material.dart';
 import 'package:r_calendar/r_calendar.dart';
 
 void main() => runApp(MyApp());
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      home: MyHomePage(),
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -145,10 +159,11 @@ class _MyHomePageState extends State<MyHomePage> {
       body: RCalendarWidget(
                controller: controller,
                customWidget: DefaultRCalendarCustomWidget(),
-               firstDate: DateTime(1970, 1, 1),
-               lastDate: DateTime(2055, 12, 31),
+               firstDate: DateTime(1970, 1, 1), //当前日历的最小日期
+               lastDate: DateTime(2055, 12, 31),//当前日历的最大日期
              ),
     );
   }
 }
+
 ```
