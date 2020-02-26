@@ -165,7 +165,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
+```
 ## 3.自定义数据(请更新版本到 v0.1.6)
 用户可以通过将数据设置到controller里面，然后再从`RCalendarCustomWidget`里获取
 ```dart
