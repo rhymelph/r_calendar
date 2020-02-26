@@ -37,7 +37,7 @@ abstract class RCalendarCustomWidget {
   Widget buildTopWidget(BuildContext context, RCalendarController controller);
 
   //是否不可用,不可用时，无点击事件
-  bool isUnable(DateTime time, bool isSameMonth);
+  bool isUnable(BuildContext context, DateTime time, bool isSameMonth);
 
   //点击拦截，当返回true时进行拦截，就不会改变选中日期
   FutureOr<bool> clickInterceptor(BuildContext context, DateTime dateTime);
@@ -131,7 +131,7 @@ class DefaultRCalendarCustomWidget extends RCalendarCustomWidget {
   }
 
   @override
-  bool isUnable(DateTime time, bool isSameMonth) {
+  bool isUnable(BuildContext context, DateTime time, bool isSameMonth) {
     return isSameMonth;
   }
 

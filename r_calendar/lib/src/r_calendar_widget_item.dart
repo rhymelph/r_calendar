@@ -43,7 +43,7 @@ class RCalendarMonthItem extends StatelessWidget {
         final bool disabled = dayToBuild.isAfter(controller.lastDate) ||
             dayToBuild.isBefore(controller.firstDate) ||
             (data.customWidget != null &&
-                !data.customWidget.isUnable(dayToBuild, false));
+                !data.customWidget.isUnable(context, dayToBuild, false));
         if (disabled) {
           types.add(RCalendarType.disable);
         }
@@ -73,7 +73,7 @@ class RCalendarMonthItem extends StatelessWidget {
         final bool disabled = dayToBuild.isAfter(controller.lastDate) ||
             dayToBuild.isBefore(controller.firstDate) ||
             (data.customWidget != null &&
-                !data.customWidget.isUnable(dayToBuild, false));
+                !data.customWidget.isUnable(context, dayToBuild, false));
         if (disabled) {
           types.add(RCalendarType.disable);
         }
@@ -100,7 +100,7 @@ class RCalendarMonthItem extends StatelessWidget {
         final bool disabled = dayToBuild.isAfter(controller.lastDate) ||
             dayToBuild.isBefore(controller.firstDate) ||
             (data.customWidget != null &&
-                !data.customWidget.isUnable(dayToBuild, true));
+                !data.customWidget.isUnable(context, dayToBuild, true));
         if (disabled) {
           types.add(RCalendarType.disable);
         }
@@ -178,7 +178,7 @@ class RCalendarWeekItem extends StatelessWidget {
       final bool disabled = dayToBuild.isAfter(controller.lastDate) ||
           dayToBuild.isBefore(controller.firstDate) ||
           (data.customWidget != null &&
-              !data.customWidget.isUnable(dayToBuild, true));
+              !data.customWidget.isUnable(context, dayToBuild, true));
       if (disabled) {
         types.add(RCalendarType.disable);
       }

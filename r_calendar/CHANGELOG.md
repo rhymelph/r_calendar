@@ -1,3 +1,5 @@
+## [0.1.6] - add expand data in controller
+
 ## [0.1.5] -  format
 
 ## [0.1.4] -  add week view .

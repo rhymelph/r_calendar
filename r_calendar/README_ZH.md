@@ -166,4 +166,35 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+## 3.自定义数据(请更新版本到 v0.1.6)
+用户可以通过将数据设置到controller里面，然后再从`RCalendarCustomWidget`里获取
+```dart
+/// 初始化控制器，我这里是设置自定义数据的类型为List<DateTime>，当然，你可以设置成自己需要的类型
+/// 在构造方法中新增了一个`initialData`参数，用于初始化你的自定义数据
+    RCalendarController<List<DateTime>> controller =  RCalendarController.single(
+    initialData: [
+            DateTime.now(),
+            DateTime.now().add(Duration(days: 1)),
+            DateTime.now().add(Duration(days: 2)),
+          ]
+    );
+
+/// 如果你想更改自定义数据，请使用下面的例子，无需setState
+    controller.data = [....];
+
+/// 你可以在RCalendarCustomWidget自定义类中通过context获取对应的controller.然后根据自定义数据进行显示判断
+
+class MyRCalendarCustomWidget extends RCalendarCustomWidget {
+///...
+  @override
+  Widget buildDateTime(
+      BuildContext context, DateTime time, List<RCalendarType> types) {
+
+    // new
+    RCalendarController<List<DateTime>> controller =RCalendarMarker.of(context).notifier;
+    // new
+
+    //...
+   }
+///...
 ```

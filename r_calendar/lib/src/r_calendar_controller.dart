@@ -11,20 +11,29 @@ enum RCalendarMode {
   month,
 }
 
-class RCalendarController extends ChangeNotifier {
+/// you can use [RCalendarMarker.of(context).notifier] get it.
+class RCalendarController<T> extends ChangeNotifier {
   RCalendarController.single(
-      {RCalendarMode mode, DateTime selectedDate, bool isAutoSelect})
+      {RCalendarMode mode,
+      DateTime selectedDate,
+      bool isAutoSelect,
+      T initialData})
       : selectedDates = selectedDate != null ? [selectedDate] : [],
         _isMultiple = false,
         _isDispersion = true,
         _isAutoSelect = isAutoSelect ?? true,
+        _data = initialData,
         _mode = mode ?? RCalendarMode.month;
 
   RCalendarController.multiple(
-      {RCalendarMode mode, this.selectedDates, bool isDispersion})
+      {RCalendarMode mode,
+      this.selectedDates,
+      bool isDispersion,
+      T initialData})
       : _isMultiple = true,
         _isDispersion = isDispersion ?? true,
         _isAutoSelect = false,
+        _data = initialData,
         _mode = mode ?? RCalendarMode.month;
 
   //当前显示的月份
@@ -100,6 +109,7 @@ class RCalendarController extends ChangeNotifier {
     notifyListeners();
   }
 
+  //日历模式，支持周视图，月视图
   RCalendarMode _mode;
 
   RCalendarMode get mode => _mode;
@@ -117,6 +127,15 @@ class RCalendarController extends ChangeNotifier {
   }
 
   bool get isMonthMode => _mode == RCalendarMode.month;
+
+  //拓展数据
+  T _data;
+  T get data => _data;
+
+  set data(T data) {
+    _data = data;
+    notifyListeners();
+  }
 
   MaterialLocalizations _localizations;
 

@@ -151,4 +151,34 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+## 3.Expand Data(update by v0.1.6 )
+```dart
+/// initial
+    RCalendarController<List<DateTime>> controller =  RCalendarController.single(
+    initialData: [
+            DateTime.now(),
+            DateTime.now().add(Duration(days: 1)),
+            DateTime.now().add(Duration(days: 2)),
+          ]
+    );
+
+/// if you want to update expand data ,use it.
+    controller.data = [....];
+
+/// you can use it get the controller in RCalendarCustomWidget
+
+class MyRCalendarCustomWidget extends RCalendarCustomWidget {
+///...
+  @override
+  Widget buildDateTime(
+      BuildContext context, DateTime time, List<RCalendarType> types) {
+
+    // new
+    RCalendarController<List<DateTime>> controller =RCalendarMarker.of(context).notifier;
+    // new
+
+    //...
+   }
+///...
 ```
