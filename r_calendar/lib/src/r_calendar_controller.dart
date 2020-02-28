@@ -20,7 +20,9 @@ class RCalendarController<T> extends ChangeNotifier {
       DateTime selectedDate,
       bool isAutoSelect,
       T initialData})
-      : _selectedDates = selectedDate != null ? SplayTreeSet.of([selectedDate]) : SplayTreeSet(),
+      : _selectedDates = selectedDate != null
+            ? SplayTreeSet.of([selectedDate])
+            : SplayTreeSet(),
         _isMultiple = false,
         _isDispersion = true,
         _isAutoSelect = isAutoSelect ?? true,
@@ -55,12 +57,12 @@ class RCalendarController<T> extends ChangeNotifier {
   //多选
   SplayTreeSet<DateTime> _selectedDates;
 
-  List<DateTime> get selectedDates{
+  List<DateTime> get selectedDates {
 //    _selectedDates.sort(_sortSelectDates);
     return _selectedDates.toList();
   }
 
-  set selectedDates(List<DateTime> selectedDates){
+  set selectedDates(List<DateTime> selectedDates) {
     _selectedDates = SplayTreeSet.of(selectedDates);
   }
 
@@ -98,9 +100,9 @@ class RCalendarController<T> extends ChangeNotifier {
       Duration duration = end.difference(first);
       _selectedDates.clear();
       _selectedDates.addAll(List.generate(
-          duration.inDays, (int index) => first.add(Duration(days: index)))
+              duration.inDays, (int index) => first.add(Duration(days: index)))
           .toList()
-        ..add(end));
+            ..add(end));
     }
     notifyListeners();
   }
@@ -159,7 +161,9 @@ class RCalendarController<T> extends ChangeNotifier {
     if (isMultiple) {
       _selectedDates ??= SplayTreeSet();
     } else {
-      _selectedDates ??= SplayTreeSet.of([DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day)]);
+      _selectedDates ??= SplayTreeSet.of([
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
+      ]);
     }
     displayedMonthDate = selectedDate ?? DateTime.now();
     final int monthPage =
@@ -235,7 +239,7 @@ class RCalendarController<T> extends ChangeNotifier {
               selectedDate != _selectedDates.last) {
             List<DateTime> dateTimes = _selectedDates.toList();
 
-            final int index =dateTimes.indexOf(selectedDate);
+            final int index = dateTimes.indexOf(selectedDate);
             Duration duration1 = selectedDate.difference(_selectedDates.first);
             Duration duration2 = _selectedDates.last.difference(selectedDate);
             if (duration1.inMilliseconds < duration2.inMilliseconds) {
