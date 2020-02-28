@@ -1,3 +1,5 @@
+## [0.1.7] - Fix the bugs in aggregate selection
+
 ## [0.1.6] - add expand data in controller
 
 ## [0.1.5] -  format

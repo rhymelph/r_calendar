@@ -1,6 +1,8 @@
 // Copyright 2019 The rhyme_lph Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -18,7 +20,7 @@ class RCalendarController<T> extends ChangeNotifier {
       DateTime selectedDate,
       bool isAutoSelect,
       T initialData})
-      : selectedDates = selectedDate != null ? [selectedDate] : [],
+      : _selectedDates = selectedDate != null ? SplayTreeSet.of([selectedDate]) : SplayTreeSet(),
         _isMultiple = false,
         _isDispersion = true,
         _isAutoSelect = isAutoSelect ?? true,
@@ -27,12 +29,13 @@ class RCalendarController<T> extends ChangeNotifier {
 
   RCalendarController.multiple(
       {RCalendarMode mode,
-      this.selectedDates,
+      List<DateTime> selectedDates,
       bool isDispersion,
       T initialData})
       : _isMultiple = true,
         _isDispersion = isDispersion ?? true,
         _isAutoSelect = false,
+        _selectedDates = SplayTreeSet.of(selectedDates),
         _data = initialData,
         _mode = mode ?? RCalendarMode.month;
 
@@ -50,14 +53,24 @@ class RCalendarController<T> extends ChangeNotifier {
   DateTime lastDate;
 
   //多选
-  List<DateTime> selectedDates;
+  SplayTreeSet<DateTime> _selectedDates;
+
+  List<DateTime> get selectedDates{
+//    _selectedDates.sort(_sortSelectDates);
+    return _selectedDates.toList();
+  }
+
+  set selectedDates(List<DateTime> selectedDates){
+    _selectedDates = SplayTreeSet.of(selectedDates);
+  }
 
   //单选选中的日期
   DateTime get selectedDate =>
-      selectedDates.isEmpty ? null : selectedDates.first;
+      _selectedDates.isEmpty ? null : _selectedDates.first;
 
   set selectedDate(DateTime selectedDate) {
-    selectedDates.first = selectedDate;
+    _selectedDates.remove(_selectedDates.first);
+    _selectedDates.add(selectedDate);
   }
 
   //单选是否当切换月份时自动选
@@ -79,16 +92,15 @@ class RCalendarController<T> extends ChangeNotifier {
   set isDispersion(bool isDispersion) {
     assert(isDispersion != null, 'is dispersion not null');
     _isDispersion = isDispersion;
-    if (selectedDates != null && selectedDates.length > 1 && !isDispersion) {
-      selectedDates.sort((a, b) =>
-          a.millisecondsSinceEpoch > b.millisecondsSinceEpoch ? 1 : 0);
-      DateTime first = selectedDates.first;
-      DateTime end = selectedDates.last;
+    if (_selectedDates != null && _selectedDates.length > 1 && !isDispersion) {
+      DateTime first = _selectedDates.first;
+      DateTime end = _selectedDates.last;
       Duration duration = end.difference(first);
-      selectedDates = List.generate(
-              duration.inDays, (int index) => first.add(Duration(days: index)))
+      _selectedDates.clear();
+      _selectedDates.addAll(List.generate(
+          duration.inDays, (int index) => first.add(Duration(days: index)))
           .toList()
-            ..add(end);
+        ..add(end));
     }
     notifyListeners();
   }
@@ -101,10 +113,12 @@ class RCalendarController<T> extends ChangeNotifier {
   set isMultiple(bool isMultiple) {
     assert(isMultiple != null, 'is Multiple not null');
     this._isMultiple = isMultiple;
-    if (selectedDates != null &&
-        selectedDates.length > 1 &&
+    if (_selectedDates != null &&
+        _selectedDates.length > 1 &&
         isMultiple == false) {
-      selectedDates.removeRange(1, selectedDates.length);
+      DateTime firstDateTime = _selectedDates.first;
+      _selectedDates.clear();
+      _selectedDates.add(firstDateTime);
     }
     notifyListeners();
   }
@@ -143,13 +157,9 @@ class RCalendarController<T> extends ChangeNotifier {
     this.firstDate = firstDate;
     this.lastDate = endDate;
     if (isMultiple) {
-      selectedDates ??= [];
-      if (selectedDates.length > 1) {
-        selectedDates.sort((a, b) =>
-            a.millisecondsSinceEpoch > b.millisecondsSinceEpoch ? 1 : 0);
-      }
+      _selectedDates ??= SplayTreeSet();
     } else {
-      selectedDates ??= [DateTime.now()];
+      _selectedDates ??= SplayTreeSet.of([DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day)]);
     }
     displayedMonthDate = selectedDate ?? DateTime.now();
     final int monthPage =
@@ -209,38 +219,43 @@ class RCalendarController<T> extends ChangeNotifier {
   /// [selectedDate] your select dateTime
   ///
   void updateSelected(DateTime selectedDate) {
+//    _selectedDates.sort(_sortSelectDates);
     if (isMultiple) {
       // multiple select
-      if (selectedDates.contains(selectedDate)) {
+      if (_selectedDates.contains(selectedDate)) {
         // your select dateTime in your selectedDates
         if (_isDispersion) {
           // dispersion select only remove
-          selectedDates.remove(selectedDate);
+          _selectedDates.remove(selectedDate);
         } else {
 //          //进行移除
 //          selectedDates.sort((a, b) =>
 //          a.millisecondsSinceEpoch > b.millisecondsSinceEpoch ? 0 : 1);
-          if (selectedDate != selectedDates.first &&
-              selectedDate != selectedDates.last) {
-            final int index = selectedDates.indexOf(selectedDate);
-            Duration duration1 = selectedDate.difference(selectedDates.first);
-            Duration duration2 = selectedDates.last.difference(selectedDate);
+          if (selectedDate != _selectedDates.first &&
+              selectedDate != _selectedDates.last) {
+            List<DateTime> dateTimes = _selectedDates.toList();
+
+            final int index =dateTimes.indexOf(selectedDate);
+            Duration duration1 = selectedDate.difference(_selectedDates.first);
+            Duration duration2 = _selectedDates.last.difference(selectedDate);
             if (duration1.inMilliseconds < duration2.inMilliseconds) {
-              selectedDates.removeRange(index + 1, selectedDates.length);
+              dateTimes.removeRange(index + 1, _selectedDates.length);
             } else {
-              selectedDates.removeRange(0, index);
+              dateTimes.removeRange(0, index);
             }
+            _selectedDates.clear();
+            _selectedDates.addAll(dateTimes);
           }
         }
       } else {
-        if (_isDispersion || selectedDates.length < 1) {
-          selectedDates.add(selectedDate);
+        if (_isDispersion || _selectedDates.length < 1) {
+          _selectedDates.add(selectedDate);
         } else {
           DateTime first;
           DateTime last;
 
-          if (selectedDates.length == 1) {
-            first = selectedDates.first;
+          if (_selectedDates.length == 1) {
+            first = _selectedDates.first;
             if (first.isBefore(selectedDate)) {
               last = selectedDate;
             } else {
@@ -248,44 +263,46 @@ class RCalendarController<T> extends ChangeNotifier {
               first = last;
             }
           } else {
-            first = selectedDates.first;
-            last = selectedDates.last;
+            first = _selectedDates.first;
+            last = _selectedDates.last;
           }
 
           if (first.isAfter(selectedDate) &&
-              (last.isAfter(selectedDate) || selectedDates.length == 1)) {
+              (last.isAfter(selectedDate) || _selectedDates.length == 1)) {
             Duration duration = first.difference(selectedDate);
             final List<DateTime> addList = List.generate(duration.inDays,
                 (int index) => first.subtract(Duration(days: index)));
             addList.add(selectedDate);
             addList.forEach((dateTime) {
-              if (!selectedDates.contains(dateTime)) {
-                selectedDates.insert(0, dateTime);
+              if (!_selectedDates.contains(dateTime)) {
+//                _selectedDates.insert(0, dateTime);
+                _selectedDates..add(dateTime);
               }
             });
           } else if (first.isBefore(selectedDate) &&
-              (last.isBefore(selectedDate) || selectedDates.length == 1)) {
+              (last.isBefore(selectedDate) || _selectedDates.length == 1)) {
             Duration duration = selectedDate
-                .difference(selectedDates.length == 1 ? first : last);
+                .difference(_selectedDates.length == 1 ? first : last);
             final List<DateTime> addList = List.generate(
                 duration.inDays,
-                (int index) => selectedDates.length == 1
+                (int index) => _selectedDates.length == 1
                     ? first.add(Duration(days: index))
                     : last.add(Duration(days: index)));
             addList.add(selectedDate);
             addList.forEach((dateTIme) {
-              if (!selectedDates.contains(dateTIme)) {
-                selectedDates.add(dateTIme);
+              if (!_selectedDates.contains(dateTIme)) {
+                _selectedDates.add(dateTIme);
               }
             });
           }
         }
       }
     } else {
-      if (selectedDates.isEmpty) {
-        selectedDates.add(selectedDate);
+      if (_selectedDates.isEmpty) {
+        _selectedDates.add(selectedDate);
       } else {
-        selectedDates.first = selectedDate;
+        _selectedDates.remove(_selectedDates.first);
+        _selectedDates.add(selectedDate);
       }
     }
     notifyListeners();
@@ -343,5 +360,9 @@ class RCalendarController<T> extends ChangeNotifier {
     monthController?.dispose();
     weekController?.dispose();
     super.dispose();
+  }
+
+  int _sortSelectDates(DateTime a, DateTime b) {
+    return a.millisecondsSinceEpoch.compareTo(b.millisecondsSinceEpoch);
   }
 }
