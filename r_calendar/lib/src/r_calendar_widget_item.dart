@@ -137,11 +137,19 @@ class RCalendarMonthItem extends StatelessWidget {
               }
               data.onChanged(dayToBuild);
             },
-            child: data.customWidget.buildDateTime(context, dayToBuild, types),
+            child: Semantics(
+              label:
+                  '${localizations.formatDecimal(day)}, ${localizations.formatFullDate(dayToBuild)}',
+              selected: isSelectedDay,
+              excludeSemantics: true,
+              child:
+                  data.customWidget.buildDateTime(context, dayToBuild, types),
+            ),
           ));
         } else {
-          labels
-              .add(data.customWidget.buildDateTime(context, dayToBuild, types));
+          labels.add(ExcludeSemantics(
+            child: data.customWidget.buildDateTime(context, dayToBuild, types),
+          ));
         }
       }
     }
@@ -152,7 +160,7 @@ class RCalendarMonthItem extends StatelessWidget {
       padding: EdgeInsets.zero,
       gridDelegate: _DayPickerGridDelegate(data.customWidget.childHeight ?? 42),
       childrenDelegate:
-          SliverChildListDelegate(labels, addRepaintBoundaries: true),
+          SliverChildListDelegate(labels, addRepaintBoundaries: false),
     );
   }
 }

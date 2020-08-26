@@ -161,7 +161,8 @@ class _RCalendarWidgetState extends State<RCalendarWidget> {
                   onPageChanged: (int page) {
                     _handlePageChanged(page, RCalendarMode.week);
                   },
-                  itemCount: widget.controller.maxPage,
+                  itemCount: widget.controller.maxWeekPage,
+                  allowImplicitScrolling: true,
                 ),
                 PageView.builder(
                   key: ValueKey("month_view"),
@@ -170,7 +171,8 @@ class _RCalendarWidgetState extends State<RCalendarWidget> {
                   onPageChanged: (int page) {
                     _handlePageChanged(page, RCalendarMode.month);
                   },
-                  itemCount: widget.controller.maxPage,
+                  itemCount: widget.controller.maxMonthPage,
+                  allowImplicitScrolling: true,
                 ),
               ],
             ),
