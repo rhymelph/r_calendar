@@ -211,13 +211,14 @@ class RCalendarController<T> extends ChangeNotifier {
   void jumpTo(DateTime dateTime) {
     if (isMonthMode) {
       final int monthPage = RCalendarUtils.monthDelta(firstDate, dateTime);
-      if (monthController!=null&&monthPage != monthController.page ~/ 1) {
-        print('更新显示的月份-月份(实际):$monthPage , 当前页数：${ monthController.page ~/ 1}');
+      if (monthController != null && monthPage != monthController.page ~/ 1) {
+        print('更新显示的月份-月份(实际):$monthPage , 当前页数：${monthController.page ~/ 1}');
         monthController.jumpToPage(monthPage);
       }
     } else {
-      final int weekPage = RCalendarUtils.weekDelta(firstDate, dateTime, _localizations);
-      if (weekController!=null&&weekPage != weekController.page ~/ 1) {
+      final int weekPage =
+          RCalendarUtils.weekDelta(firstDate, dateTime, _localizations);
+      if (weekController != null && weekPage != weekController.page ~/ 1) {
         weekController?.jumpToPage(weekPage);
       }
     }
@@ -315,8 +316,9 @@ class RCalendarController<T> extends ChangeNotifier {
       }
     }
     notifyListeners();
-    if(!isMonthMode){
-      int weekPage = RCalendarUtils.weekDelta(firstDate, selectedDate, _localizations);
+    if (!isMonthMode) {
+      int weekPage =
+          RCalendarUtils.weekDelta(firstDate, selectedDate, _localizations);
       updateDisplayedDate(weekPage, mode);
     }
   }
@@ -348,8 +350,10 @@ class RCalendarController<T> extends ChangeNotifier {
           this.selectedDate =
               this.selectedDate.add(Duration(days: isBefore ? 7 : -7));
         }
-        int selectDatePage = RCalendarUtils.weekDelta(firstDate, selectedDate, _localizations);
-        if(displayedMonthDate.month != selectedDate.month && selectDatePage == page){
+        int selectDatePage =
+            RCalendarUtils.weekDelta(firstDate, selectedDate, _localizations);
+        if (displayedMonthDate.month != selectedDate.month &&
+            selectDatePage == page) {
           //月份不一样
           displayedMonthDate = selectedDate;
         }
@@ -359,7 +363,8 @@ class RCalendarController<T> extends ChangeNotifier {
   }
 
   //最大的周期页数
-  int get maxWeekPage => RCalendarUtils.weekDelta(firstDate, lastDate, _localizations) + 1;
+  int get maxWeekPage =>
+      RCalendarUtils.weekDelta(firstDate, lastDate, _localizations) + 1;
   //最大的月份页数
   int get maxMonthPage => RCalendarUtils.monthDelta(firstDate, lastDate) + 1;
 

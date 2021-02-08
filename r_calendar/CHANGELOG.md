@@ -1,4 +1,6 @@
-## [0.1.7] - Fix the bugs in week select bug.
+## [0.1.9-nullsafety] - null safety
+
+## [0.1.8] - Fix the bugs in week select bug.
 
 ## [0.1.7] - Fix the bugs in aggregate selection
 
