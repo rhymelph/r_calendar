@@ -902,7 +902,6 @@ extension LunerDateTimeExternal on DateTime {
 
   int get leapMonth => _solarToLunar()[3] == 1 ? lunarMonth : null;
 
-
   // 公历节日
   String get gregorianFestival {
     String text = string;
@@ -982,9 +981,9 @@ extension LunerDateTimeExternal on DateTime {
       return (month >= 10 ? month.toString() : "0$month") +
           (day >= 10 ? day.toString() : "0$day");
     }
+
     return "$year" + _getString(month, day);
   }
-
 
   String get specialFestival {
     List<String> specialFestival = specialFestivals;
