@@ -15,6 +15,7 @@ import 'src/r_calendar_custom_widget.dart';
 export 'src/r_calendar_controller.dart';
 export 'src/r_calendar_custom_widget.dart';
 export 'src/r_calendar_widget_item.dart';
+export 'src/r_calendar_extension.dart';
 
 class RCalendarWidget extends StatefulWidget {
   // 最小日期
@@ -193,10 +194,33 @@ class _RCalendarWidgetState extends State<RCalendarWidget> {
   Widget _builderWeekItems(BuildContext context, int index) {
     DateTime week = RCalendarUtils.addWeeksToWeeksDate(
         widget.firstDate, index, MaterialLocalizations.of(context));
-    return RCalendarWeekItem(
-      weekDate: week,
+    return AutoKeepAliveWidget(
+      child: RCalendarWeekItem(
+        weekDate: week,
+      ),
     );
   }
+}
+
+class AutoKeepAliveWidget extends StatefulWidget {
+  final Widget child;
+
+  const AutoKeepAliveWidget({Key key, this.child}) : super(key: key);
+
+  @override
+  _AutoKeepAliveWidgetState createState() => _AutoKeepAliveWidgetState();
+}
+
+class _AutoKeepAliveWidgetState extends State<AutoKeepAliveWidget>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return widget.child;
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class RCalendarMarker extends InheritedNotifier<RCalendarController> {

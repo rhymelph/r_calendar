@@ -1,10 +1,10 @@
 name: r_calendar
 description: A new Flutter package about calendar,you can use this design the calendar and support single or multiple selected.
-version: 0.1.9-nullsafety
+version: 0.1.10-nullsafety
 homepage: https://github.com/rhymelph/r_calendar
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:

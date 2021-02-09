@@ -212,7 +212,7 @@ class RCalendarController<T> extends ChangeNotifier {
     if (isMonthMode) {
       final int monthPage = RCalendarUtils.monthDelta(firstDate, dateTime);
       if (monthController != null && monthPage != monthController.page ~/ 1) {
-        print('更新显示的月份-月份(实际):$monthPage , 当前页数：${monthController.page ~/ 1}');
+        // print('更新显示的月份-月份(实际):$monthPage , 当前页数：${monthController.page ~/ 1}');
         monthController.jumpToPage(monthPage);
       }
     } else {
@@ -327,7 +327,7 @@ class RCalendarController<T> extends ChangeNotifier {
   void updateDisplayedDate(int page, RCalendarMode mode) {
     if (mode != _mode) return;
     if (isMonthMode) {
-      print('更新显示的月份-月份$page');
+      // print('更新显示的月份-月份$page');
       displayedMonthDate = RCalendarUtils.addMonthsToMonthDate(firstDate, page);
       if (isAutoSelect && isMultiple == false && selectedDate != null) {
         int daysInMonth = RCalendarUtils.getDaysInMonth(
@@ -337,7 +337,7 @@ class RCalendarController<T> extends ChangeNotifier {
             DateTime(displayedMonthDate.year, displayedMonthDate.month, day);
       }
     } else {
-      print('更新显示的月份-周期,页数$page');
+      // print('更新显示的月份-周期,页数$page');
       displayedMonthDate =
           RCalendarUtils.addWeeksToWeeksDate(firstDate, page, _localizations);
       if (isAutoSelect && isMultiple == false && selectedDate != null) {

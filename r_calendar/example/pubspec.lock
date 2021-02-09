@@ -127,7 +127,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.1.9-nullsafety"
+    version: "0.1.10-nullsafety"
   sky_engine:
     dependency: transitive
     description: flutter

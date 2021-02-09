@@ -64,9 +64,9 @@ class _MyHomePageState extends State<MyHomePage> {
         RCalendarController.single(isAutoSelect: true,
             //mark day
             initialData: [
-          DateTime.now(),
-          DateTime.now().add(Duration(days: 1)),
-          DateTime.now().add(Duration(days: 2)),
+          // DateTime.now(),
+          // DateTime.now().add(Duration(days: 1)),
+          // DateTime.now().add(Duration(days: 2)),
         ]
 //      selectedDate: DateTime.now(),
             )
@@ -297,6 +297,9 @@ class MyRCalendarCustomWidget extends RCalendarCustomWidget {
     Widget child = Container(
         decoration: decoration,
         alignment: Alignment.center,
+        padding: EdgeInsets.only(
+          bottom: 10,
+        ),
         child: Text(
           time.day.toString(),
           style: childStyle,
@@ -320,7 +323,38 @@ class MyRCalendarCustomWidget extends RCalendarCustomWidget {
               )),
         ],
       );
+    } else {
+      String festal = time.specialFestival;
+      if (festal.isEmpty) {
+        festal = time.traditionFestival;
+      }
+      if (festal.isEmpty) {
+        festal = time.gregorianFestival;
+      }
+      if (festal.isEmpty) {
+        festal = time.numToChinese;
+      }
+      if (festal.isNotEmpty) {
+        child = Stack(
+          children: [
+            child,
+            Positioned(
+              bottom: 6,
+              left: 0,
+              right: 0,
+              child: Text(
+                festal,
+                textAlign: TextAlign.center,
+                style: childStyle.copyWith(
+                  fontSize: 11,
+                ),
+              ),
+            ),
+          ],
+        );
+      }
     }
+
     return Tooltip(
       message: MaterialLocalizations.of(context).formatFullDate(time),
       child: child,
