@@ -900,7 +900,7 @@ extension LunerDateTimeExternal on DateTime {
 
   int get lunarDay => _solarToLunar()[2];
 
-  int get leapMonth => _solarToLunar()[3] == 1 ? lunarMonth : null;
+  int? get leapMonth => _solarToLunar()[3] == 1 ? lunarMonth : null;
 
   // 公历节日
   String get gregorianFestival {

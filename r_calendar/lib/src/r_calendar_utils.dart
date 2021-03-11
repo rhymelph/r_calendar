@@ -33,7 +33,7 @@ class RCalendarUtils {
 
   /// 获取第一天的偏移量,星期一
   static int computeFirstDayOffset(
-      int year, int month, MaterialLocalizations localizations) {
+      int year, int month, MaterialLocalizations? localizations) {
     // 0-based day of week, with 0 representing Monday.
     final int weekdayFromMonday = DateTime(year, month).weekday - 1;
     // 0-based day of week, with 0 representing Sunday.
@@ -54,7 +54,7 @@ class RCalendarUtils {
 
   /// 星期添加和减少
   static DateTime addWeeksToWeeksDate(
-      DateTime weekDate, int weeksToAdd, MaterialLocalizations localizations) {
+      DateTime weekDate, int weeksToAdd, MaterialLocalizations? localizations) {
     final firstDayOffset =
         computeFirstDayOffset(weekDate.year, weekDate.month, localizations);
     DateTime weekFirstDate = weekDate.subtract(Duration(days: firstDayOffset));
@@ -70,7 +70,7 @@ class RCalendarUtils {
 
   /// 星期总页数
   static int weekDelta(DateTime startDate, DateTime endDate,
-      MaterialLocalizations localizations) {
+      MaterialLocalizations? localizations) {
     final int firstDayOffset =
         computeFirstDayOffset(startDate.year, startDate.month, localizations);
     Duration diff = DateTime(endDate.year, endDate.month, endDate.day)

@@ -34,7 +34,7 @@ abstract class RCalendarCustomWidget {
 
   // <  2019年 11月 >
   //构建年份和月份,指示器
-  Widget buildTopWidget(BuildContext context, RCalendarController controller);
+  Widget buildTopWidget(BuildContext context, RCalendarController? controller);
 
   //是否不可用,不可用时，无点击事件
   bool isUnable(BuildContext context, DateTime time, bool isSameMonth);
@@ -50,8 +50,8 @@ class DefaultRCalendarCustomWidget extends RCalendarCustomWidget {
   @override
   Widget buildDateTime(
       BuildContext context, DateTime time, List<RCalendarType> types) {
-    TextStyle childStyle;
-    BoxDecoration decoration;
+    TextStyle? childStyle;
+    BoxDecoration? decoration;
 
     if (types.contains(RCalendarType.disable) ||
         types.contains(RCalendarType.differentMonth)) {
@@ -136,21 +136,21 @@ class DefaultRCalendarCustomWidget extends RCalendarCustomWidget {
   }
 
   @override
-  Widget buildTopWidget(BuildContext context, RCalendarController controller) {
+  Widget buildTopWidget(BuildContext context, RCalendarController? controller) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         IconButton(
           icon: Icon(Icons.chevron_left),
           onPressed: () {
-            controller.previousPage();
+            controller!.previousPage();
           },
         ),
         SizedBox(
           width: 16,
         ),
         Text(
-          DateFormat('yyyy-MM').format(controller.displayedMonthDate),
+          DateFormat('yyyy-MM').format(controller!.displayedMonthDate!),
           style: TextStyle(color: Colors.red, fontSize: 18),
         ),
         SizedBox(

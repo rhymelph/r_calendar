@@ -10,19 +10,19 @@ import 'r_calendar_controller.dart';
 import 'r_calendar_custom_widget.dart';
 
 class RCalendarMonthItem extends StatelessWidget {
-  final DateTime monthDate;
+  final DateTime? monthDate;
 
-  const RCalendarMonthItem({Key key, this.monthDate}) : super(key: key);
+  const RCalendarMonthItem({Key? key, this.monthDate}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    RCalendarMarker data = RCalendarMarker.of(context);
-    RCalendarController controller = data.notifier;
+    RCalendarMarker data = RCalendarMarker.of(context)!;
+    RCalendarController? controller = data.notifier;
     //获取星期的第一天
     final MaterialLocalizations localizations =
         MaterialLocalizations.of(context);
-    final int year = monthDate.year;
-    final int month = monthDate.month;
+    final int year = monthDate!.year;
+    final int month = monthDate!.month;
     final int dayInMonth = RCalendarUtils.getDaysInMonth(year, month);
     //第一天的偏移
     final int firstDayOffset =
@@ -40,10 +40,10 @@ class RCalendarMonthItem extends StatelessWidget {
         final DateTime dayToBuild =
             DateTime(year, month, 1).subtract(Duration(days: (day * -1) + 1));
 
-        final bool disabled = dayToBuild.isAfter(controller.lastDate) ||
+        final bool disabled = dayToBuild.isAfter(controller!.lastDate!) ||
             dayToBuild.isBefore(controller.firstDate) ||
             (data.customWidget != null &&
-                !data.customWidget.isUnable(context, dayToBuild, false));
+                !data.customWidget!.isUnable(context, dayToBuild, false));
         if (disabled) {
           types.add(RCalendarType.disable);
         }
@@ -52,17 +52,17 @@ class RCalendarMonthItem extends StatelessWidget {
           labels.add(GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () async {
-              if (await data.customWidget
+              if (await data.customWidget!
                   .clickInterceptor(context, dayToBuild)) {
                 return;
               }
               data.onChanged(dayToBuild);
             },
-            child: data.customWidget.buildDateTime(context, dayToBuild, types),
+            child: data.customWidget!.buildDateTime(context, dayToBuild, types),
           ));
         } else {
           labels
-              .add(data.customWidget.buildDateTime(context, dayToBuild, types));
+              .add(data.customWidget!.buildDateTime(context, dayToBuild, types));
         }
       } else if (day > dayInMonth) {
         //大于当月的日期
@@ -70,10 +70,10 @@ class RCalendarMonthItem extends StatelessWidget {
         final DateTime dayToBuild = DateTime(year, month, dayInMonth)
             .add(Duration(days: day - dayInMonth));
 
-        final bool disabled = dayToBuild.isAfter(controller.lastDate) ||
+        final bool disabled = dayToBuild.isAfter(controller!.lastDate!) ||
             dayToBuild.isBefore(controller.firstDate) ||
             (data.customWidget != null &&
-                !data.customWidget.isUnable(context, dayToBuild, false));
+                !data.customWidget!.isUnable(context, dayToBuild, false));
         if (disabled) {
           types.add(RCalendarType.disable);
         }
@@ -82,25 +82,25 @@ class RCalendarMonthItem extends StatelessWidget {
           labels.add(GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () async {
-              if (await data.customWidget
+              if (await data.customWidget!
                   .clickInterceptor(context, dayToBuild)) {
                 return;
               }
               data.onChanged(dayToBuild);
             },
-            child: data.customWidget.buildDateTime(context, dayToBuild, types),
+            child: data.customWidget!.buildDateTime(context, dayToBuild, types),
           ));
         } else {
           labels
-              .add(data.customWidget.buildDateTime(context, dayToBuild, types));
+              .add(data.customWidget!.buildDateTime(context, dayToBuild, types));
         }
       } else {
         List<RCalendarType> types = [RCalendarType.disable];
         final DateTime dayToBuild = DateTime(year, month, day);
-        final bool disabled = dayToBuild.isAfter(controller.lastDate) ||
+        final bool disabled = dayToBuild.isAfter(controller!.lastDate!) ||
             dayToBuild.isBefore(controller.firstDate) ||
             (data.customWidget != null &&
-                !data.customWidget.isUnable(context, dayToBuild, true));
+                !data.customWidget!.isUnable(context, dayToBuild, true));
         if (disabled) {
           types.add(RCalendarType.disable);
         }
@@ -108,7 +108,7 @@ class RCalendarMonthItem extends StatelessWidget {
         try {
           isSelectedDay = controller.selectedDates
                   .where((selectedDate) =>
-                      selectedDate.year == year &&
+                      selectedDate!.year == year &&
                       selectedDate.month == month &&
                       selectedDate.day == day)
                   .length !=
@@ -117,9 +117,9 @@ class RCalendarMonthItem extends StatelessWidget {
         if (isSelectedDay) {
           types.add(RCalendarType.selected);
         }
-        final bool isToday = data.toDayDate.year == year &&
-            data.toDayDate.month == month &&
-            data.toDayDate.day == day;
+        final bool isToday = data.toDayDate!.year == year &&
+            data.toDayDate!.month == month &&
+            data.toDayDate!.day == day;
         if (isToday) {
           types.add(RCalendarType.today);
         }
@@ -131,7 +131,7 @@ class RCalendarMonthItem extends StatelessWidget {
           labels.add(GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () async {
-              if (await data.customWidget
+              if (await data.customWidget!
                   .clickInterceptor(context, dayToBuild)) {
                 return;
               }
@@ -143,12 +143,12 @@ class RCalendarMonthItem extends StatelessWidget {
               selected: isSelectedDay,
               excludeSemantics: true,
               child:
-                  data.customWidget.buildDateTime(context, dayToBuild, types),
+                  data.customWidget!.buildDateTime(context, dayToBuild, types),
             ),
           ));
         } else {
           labels.add(ExcludeSemantics(
-            child: data.customWidget.buildDateTime(context, dayToBuild, types),
+            child: data.customWidget!.buildDateTime(context, dayToBuild, types),
           ));
         }
       }
@@ -158,7 +158,7 @@ class RCalendarMonthItem extends StatelessWidget {
       key: ValueKey<int>(month),
       physics: NeverScrollableScrollPhysics(),
       padding: EdgeInsets.zero,
-      gridDelegate: _DayPickerGridDelegate(data.customWidget.childHeight ?? 42),
+      gridDelegate: _DayPickerGridDelegate(data.customWidget!.childHeight ?? 42),
       childrenDelegate:
           SliverChildListDelegate(labels, addRepaintBoundaries: false),
     );
@@ -166,27 +166,27 @@ class RCalendarMonthItem extends StatelessWidget {
 }
 
 class RCalendarWeekItem extends StatelessWidget {
-  final DateTime weekDate;
+  final DateTime? weekDate;
 
-  const RCalendarWeekItem({Key key, this.weekDate}) : super(key: key);
+  const RCalendarWeekItem({Key? key, this.weekDate}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    RCalendarMarker data = RCalendarMarker.of(context);
-    RCalendarController controller = data.notifier;
+    RCalendarMarker data = RCalendarMarker.of(context)!;
+    RCalendarController? controller = data.notifier;
 
     final List<Widget> labels = [];
     for (int i = 0; i < 7; i += 1) {
       final DateTime dayToBuild =
-          DateTime(weekDate.year, weekDate.month, weekDate.day + i);
+          DateTime(weekDate!.year, weekDate!.month, weekDate!.day + i);
       final int year = dayToBuild.year;
       final int month = dayToBuild.month;
       final int day = dayToBuild.day;
       List<RCalendarType> types = [];
-      final bool disabled = dayToBuild.isAfter(controller.lastDate) ||
+      final bool disabled = dayToBuild.isAfter(controller!.lastDate!) ||
           dayToBuild.isBefore(controller.firstDate) ||
           (data.customWidget != null &&
-              !data.customWidget.isUnable(context, dayToBuild, true));
+              !data.customWidget!.isUnable(context, dayToBuild, true));
       if (disabled) {
         types.add(RCalendarType.disable);
       }
@@ -194,7 +194,7 @@ class RCalendarWeekItem extends StatelessWidget {
       try {
         isSelectedDay = controller.selectedDates
                 .where((selectedDate) =>
-                    selectedDate.year == year &&
+                    selectedDate!.year == year &&
                     selectedDate.month == month &&
                     selectedDate.day == day)
                 .length !=
@@ -203,9 +203,9 @@ class RCalendarWeekItem extends StatelessWidget {
       if (isSelectedDay) {
         types.add(RCalendarType.selected);
       }
-      final bool isToday = data.toDayDate.year == year &&
-          data.toDayDate.month == month &&
-          data.toDayDate.day == day;
+      final bool isToday = data.toDayDate!.year == year &&
+          data.toDayDate!.month == month &&
+          data.toDayDate!.day == day;
       if (isToday) {
         types.add(RCalendarType.today);
       }
@@ -216,22 +216,22 @@ class RCalendarWeekItem extends StatelessWidget {
         labels.add(GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () async {
-            if (await data.customWidget.clickInterceptor(context, dayToBuild)) {
+            if (await data.customWidget!.clickInterceptor(context, dayToBuild)) {
               return;
             }
             data.onChanged(dayToBuild);
           },
-          child: data.customWidget.buildDateTime(context, dayToBuild, types),
+          child: data.customWidget!.buildDateTime(context, dayToBuild, types),
         ));
       } else {
-        labels.add(data.customWidget.buildDateTime(context, dayToBuild, types));
+        labels.add(data.customWidget!.buildDateTime(context, dayToBuild, types));
       }
     }
     return GridView.custom(
-      key: ValueKey<String>(weekDate.toIso8601String()),
+      key: ValueKey<String>(weekDate!.toIso8601String()),
       physics: NeverScrollableScrollPhysics(),
       padding: EdgeInsets.zero,
-      gridDelegate: _DayPickerGridDelegate(data.customWidget.childHeight ?? 42),
+      gridDelegate: _DayPickerGridDelegate(data.customWidget!.childHeight ?? 42),
       childrenDelegate:
           SliverChildListDelegate(labels, addRepaintBoundaries: true),
     );
