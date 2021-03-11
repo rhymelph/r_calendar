@@ -160,11 +160,17 @@ class RCalendarController<T> extends ChangeNotifier {
     this.firstDate = firstDate;
     this.lastDate = endDate;
     if (isMultiple) {
-      _selectedDates ??= SplayTreeSet();
+      // ignore: unnecessary_null_comparison
+      if(_selectedDates == null){
+        _selectedDates = SplayTreeSet();
+      }
     } else {
-      _selectedDates ??= SplayTreeSet.of([
-        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
-      ]);
+      // ignore: unnecessary_null_comparison
+      if(_selectedDates == null){
+        _selectedDates = SplayTreeSet.of([
+          DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
+        ]);
+      }
     }
     displayedMonthDate = selectedDate ?? DateTime.now();
     final int monthPage =
@@ -172,8 +178,8 @@ class RCalendarController<T> extends ChangeNotifier {
     monthController = PageController(initialPage: monthPage);
     _localizations = DefaultMaterialLocalizations();
 
-    final int weekPage =
-        RCalendarUtils.weekDelta(firstDate, displayedMonthDate!, _localizations);
+    final int weekPage = RCalendarUtils.weekDelta(
+        firstDate, displayedMonthDate!, _localizations);
     weekController = PageController(initialPage: weekPage);
 //    controller.addListener(() {
 //      displayMonth = _addMonthsToMonthDate(firstDate, controller.page ~/ 1);
@@ -365,19 +371,22 @@ class RCalendarController<T> extends ChangeNotifier {
   //最大的周期页数
   int get maxWeekPage =>
       RCalendarUtils.weekDelta(firstDate, lastDate!, _localizations) + 1;
+
   //最大的月份页数
   int get maxMonthPage => RCalendarUtils.monthDelta(firstDate, lastDate!) + 1;
 
   //选中的页数
   int get selectedPage => isMonthMode
-      ? RCalendarUtils.monthDelta(firstDate, selectedDate ?? displayedMonthDate!)
+      ? RCalendarUtils.monthDelta(
+          firstDate, selectedDate ?? displayedMonthDate!)
       : RCalendarUtils.weekDelta(
           firstDate, selectedDate ?? displayedMonthDate!, _localizations);
 
   //当前显示的页面
   int get displayedPage => isMonthMode
       ? RCalendarUtils.monthDelta(firstDate, displayedMonthDate!)
-      : RCalendarUtils.weekDelta(firstDate, displayedMonthDate!, _localizations);
+      : RCalendarUtils.weekDelta(
+          firstDate, displayedMonthDate!, _localizations);
 
   @override
   void dispose() {

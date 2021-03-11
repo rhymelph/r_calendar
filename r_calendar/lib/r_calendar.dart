@@ -143,7 +143,7 @@ class _RCalendarWidgetState extends State<RCalendarWidget> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          widget.customWidget!.buildTopWidget(context, widget.controller) ??
+          widget.customWidget?.buildTopWidget(context, widget.controller) ??
               Container(),
           Row(
             children:

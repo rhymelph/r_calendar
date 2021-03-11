@@ -158,7 +158,7 @@ class RCalendarMonthItem extends StatelessWidget {
       key: ValueKey<int>(month),
       physics: NeverScrollableScrollPhysics(),
       padding: EdgeInsets.zero,
-      gridDelegate: _DayPickerGridDelegate(data.customWidget!.childHeight ?? 42),
+      gridDelegate: _DayPickerGridDelegate(data.customWidget?.childHeight ?? 42),
       childrenDelegate:
           SliverChildListDelegate(labels, addRepaintBoundaries: false),
     );
@@ -231,7 +231,7 @@ class RCalendarWeekItem extends StatelessWidget {
       key: ValueKey<String>(weekDate!.toIso8601String()),
       physics: NeverScrollableScrollPhysics(),
       padding: EdgeInsets.zero,
-      gridDelegate: _DayPickerGridDelegate(data.customWidget!.childHeight ?? 42),
+      gridDelegate: _DayPickerGridDelegate(data.customWidget?.childHeight ?? 42),
       childrenDelegate:
           SliverChildListDelegate(labels, addRepaintBoundaries: true),
     );
