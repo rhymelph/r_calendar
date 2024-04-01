@@ -13,7 +13,7 @@ class S implements WidgetsLocalizations {
   @override
   TextDirection get textDirection => TextDirection.ltr;
 
-  static S of(BuildContext context) => Localizations.of<S>(context, S);
+  static S of(BuildContext context) => Localizations.of<S>(context, S)!;
 
   static const LocalizationsDelegate<S> delegate = _Delegate();
 
@@ -36,6 +36,24 @@ class S implements WidgetsLocalizations {
   String get month => r'月';
 
   String get week => r'周';
+
+  @override
+  String get reorderItemDown => 'down';
+
+  @override
+  String get reorderItemLeft => 'left';
+
+  @override
+  String get reorderItemRight => 'right';
+
+  @override
+  String get reorderItemToEnd => 'end';
+
+  @override
+  String get reorderItemToStart => 'start';
+
+  @override
+  String get reorderItemUp => 'up';
 }
 
 class _Delegate extends LocalizationsDelegate<S> {
@@ -43,7 +61,7 @@ class _Delegate extends LocalizationsDelegate<S> {
 
   @override
   Future<S> load(Locale locale) {
-    String tag = locale.countryCode == null || locale.countryCode.isEmpty
+    String tag = locale.countryCode == null || locale.countryCode!.isEmpty
         ? locale.languageCode
         : locale.toString();
     switch (tag) {

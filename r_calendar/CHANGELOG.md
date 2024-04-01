@@ -1,3 +1,5 @@
+## [0.1.12] - update intl package.
+
 ## [0.1.11] - null safety.
 
 ## [0.1.10-nullsafety] - chinese lunar year.

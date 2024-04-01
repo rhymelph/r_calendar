@@ -38,7 +38,7 @@ class _MyAppState extends State<MyApp> {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({super. key, required this.title});
 
   final String title;
 
@@ -47,7 +47,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  RCalendarController<List<DateTime>> controller;
+  late RCalendarController<List<DateTime>> controller;
 
   @override
   void initState() {
@@ -61,7 +61,8 @@ class _MyHomePageState extends State<MyHomePage> {
 //      ],
 //      isDispersion: false,
 //    )
-        RCalendarController.single(isAutoSelect: true,
+        RCalendarController.single(
+            isAutoSelect: true,
             //mark day
             initialData: [
           // DateTime.now(),
@@ -225,7 +226,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     onPressed: () {
                       setState(() {
                         controller.selectedDate =
-                            controller.selectedDate.add(Duration(days: 1));
+                            controller.selectedDate?.add(Duration(days: 1));
                       });
                     },
                     tooltip: S.of(context).add,
@@ -237,8 +238,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   FloatingActionButton(
                     onPressed: () {
                       setState(() {
-                        controller.selectedDate =
-                            controller.selectedDate.subtract(Duration(days: 1));
+                        controller.selectedDate = controller.selectedDate
+                            ?.subtract(Duration(days: 1));
                       });
                     },
                     tooltip: S.of(context).reduce,
@@ -256,11 +257,11 @@ class MyRCalendarCustomWidget extends RCalendarCustomWidget {
   Widget buildDateTime(
       BuildContext context, DateTime time, List<RCalendarType> types) {
     // new
-    RCalendarController<List<DateTime>> controller =
-        RCalendarMarker.of(context).notifier;
+    RCalendarController<List<DateTime>> controller = RCalendarMarker.of(context)
+        ?.notifier as RCalendarController<List<DateTime>>;
     // new
-    TextStyle childStyle;
-    BoxDecoration decoration;
+    TextStyle? childStyle;
+    BoxDecoration? decoration;
     if (types.contains(RCalendarType.disable) ||
         types.contains(RCalendarType.differentMonth)) {
       childStyle = TextStyle(
@@ -305,7 +306,7 @@ class MyRCalendarCustomWidget extends RCalendarCustomWidget {
           style: childStyle,
         ));
     //get mark day
-    if (controller.data
+    if (controller.data!
         .where((m) =>
             time.year == m.year && time.month == m.month && time.day == m.day)
         .isNotEmpty) {
@@ -345,7 +346,7 @@ class MyRCalendarCustomWidget extends RCalendarCustomWidget {
               child: Text(
                 festal,
                 textAlign: TextAlign.center,
-                style: childStyle.copyWith(
+                style: childStyle?.copyWith(
                   fontSize: 11,
                 ),
               ),
@@ -399,21 +400,21 @@ class MyRCalendarCustomWidget extends RCalendarCustomWidget {
   }
 
   @override
-  Widget buildTopWidget(BuildContext context, RCalendarController controller) {
+  Widget buildTopWidget(BuildContext context, RCalendarController? controller) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         IconButton(
           icon: Icon(Icons.chevron_left),
           onPressed: () {
-            controller.previousPage();
+            controller?.previousPage();
           },
         ),
         SizedBox(
           width: 16,
         ),
         Text(
-          DateFormat('yyyy-MM').format(controller.displayedMonthDate),
+          DateFormat('yyyy-MM').format(controller?.displayedMonthDate??DateTime.now()),
           style: TextStyle(color: Colors.red, fontSize: 18),
         ),
         SizedBox(
@@ -422,7 +423,7 @@ class MyRCalendarCustomWidget extends RCalendarCustomWidget {
         IconButton(
           icon: Icon(Icons.chevron_right),
           onPressed: () {
-            controller.nextPage();
+            controller?.nextPage();
           },
         ),
       ],

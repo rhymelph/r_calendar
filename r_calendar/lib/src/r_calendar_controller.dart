@@ -81,7 +81,6 @@ class RCalendarController<T> extends ChangeNotifier {
   bool get isAutoSelect => _isAutoSelect;
 
   set isAutoSelect(bool isAutoSelect) {
-    assert(isAutoSelect != null, 'is audo select not null');
     this._isAutoSelect = isAutoSelect;
     notifyListeners();
   }
@@ -92,9 +91,8 @@ class RCalendarController<T> extends ChangeNotifier {
   bool get isDispersion => _isDispersion;
 
   set isDispersion(bool isDispersion) {
-    assert(isDispersion != null, 'is dispersion not null');
     _isDispersion = isDispersion;
-    if (_selectedDates != null && _selectedDates.length > 1 && !isDispersion) {
+    if (_selectedDates.length > 1 && !isDispersion) {
       DateTime first = _selectedDates.first!;
       DateTime end = _selectedDates.last!;
       Duration duration = end.difference(first);
@@ -113,10 +111,8 @@ class RCalendarController<T> extends ChangeNotifier {
   bool get isMultiple => _isMultiple;
 
   set isMultiple(bool isMultiple) {
-    assert(isMultiple != null, 'is Multiple not null');
     this._isMultiple = isMultiple;
-    if (_selectedDates != null &&
-        _selectedDates.length > 1 &&
+    if (_selectedDates.length > 1 &&
         isMultiple == false) {
       DateTime? firstDateTime = _selectedDates.first;
       _selectedDates.clear();
@@ -131,16 +127,12 @@ class RCalendarController<T> extends ChangeNotifier {
   RCalendarMode get mode => _mode;
 
   set mode(RCalendarMode mode) {
-    if (_mode == null) {
+    if (_mode != mode) {
       _mode = mode;
-    } else {
-      if (_mode != mode) {
-        _mode = mode;
-        jumpTo(selectedDate ?? displayedMonthDate);
-        notifyListeners();
-      }
+      jumpTo(selectedDate ?? displayedMonthDate);
+      notifyListeners();
     }
-  }
+    }
 
   bool get isMonthMode => _mode == RCalendarMode.month;
 

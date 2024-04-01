@@ -239,12 +239,9 @@ class RCalendarMarker extends InheritedNotifier<RCalendarController> {
     required this.customWidget,
     required RCalendarController controller,
     required Widget child,
-  })  : assert(controller != null),
-        assert(child != null),
-        super(notifier: controller, child: child);
+  })  : super(notifier: controller, child: child);
 
-  static RCalendarMarker? of(BuildContext context, {bool nullOk: false}) {
-    assert(context != null);
+  static RCalendarMarker? of(BuildContext context, {bool nullOk = false}) {
     final RCalendarMarker? inherited =
         context.dependOnInheritedWidgetOfExactType<RCalendarMarker>();
     assert(() {
